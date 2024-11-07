@@ -1,0 +1,114 @@
+﻿<Window x:Class="KoiTrading.RegisterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:KoiTrading"
+        mc:Ignorable="d"
+        Title="RegisterWindow" Height="600" Width="500">
+    <Grid>
+        <Border Width="300"
+                Height="450"
+                Background="White"
+                CornerRadius="6">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="15"
+                                  Direction="-90"
+                                  RenderingBias="Quality"
+                                  ShadowDepth="2"
+                                  Color="Gray" />
+            </Border.Effect>
+            <StackPanel Orientation="Vertical"
+                        Margin="20">
+                <TextBlock Text="Register"
+                           FontSize="25"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Top"
+                           FontWeight="Bold"
+                           Padding="10" />
+                <Grid VerticalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Username"
+                               Grid.Row="0"
+                               Margin="0,15"
+                               HorizontalAlignment="Left" />
+                    <TextBox Grid.Row="1"
+                             Padding="0,5"
+                             Width="255"
+                             BorderThickness="0,0,0,1"
+                             HorizontalAlignment="Left"
+                             Text="" />
+
+                    <TextBlock Text="Password"
+                               Grid.Row="2"
+                               Margin="0,15"
+                               HorizontalAlignment="Left" />
+                    <PasswordBox Grid.Row="3"
+                                 Password=""
+                                 Padding="0,5"
+                                 Width="255"
+                                 BorderThickness="0,0,0,1"
+                                 HorizontalAlignment="Left" />
+
+                    <TextBlock Text="Confirm Password"
+                               Grid.Row="4"
+                               Margin="0,15"
+                               HorizontalAlignment="Left" />
+                    <PasswordBox Grid.Row="5"
+                                 Password=""
+                                 Padding="0,5"
+                                 Width="255"
+                                 BorderThickness="0,0,0,1"
+                                 HorizontalAlignment="Left" />
+                </Grid>
+
+                <Button x:Name="SignUpBtn"
+                        Content="Sign Up"
+                        Foreground="White"
+                        Background="Black"
+                        Margin="0,25"
+                        Height="35"
+                        Width="250"
+                        Click="SignUpBtn_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border x:Name="SignUpBorder"
+                                                Background="{TemplateBinding Background}"
+                                                CornerRadius="16">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                                              VerticalAlignment="Center" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="AliceBlue" TargetName="SignUpBorder" />
+                                                <Setter Property="TextBlock.Foreground" Value="Black" TargetName="SignUpBorder" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <!-- Văn bản đã có tài khoản -->
+                <TextBlock HorizontalAlignment="Center" Margin="0,10">
+                    <Run Text="Already have an account? " />
+                    <Hyperlink NavigateUri="LoginWindow.xaml" RequestNavigate="Hyperlink_RequestNavigate">
+                        <Run Text="Login" />
+                    </Hyperlink>
+                </TextBlock>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
