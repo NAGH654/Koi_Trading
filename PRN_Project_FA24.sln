@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoiTrading", "KoiTrading\KoiTrading.csproj", "{C67A6E7C-E867-4473-B3B2-CB6440909688}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoiTradding.BLL", "KoiTradding.BLL\KoiTradding.BLL.csproj", "{93D591E0-B48A-4372-B677-BDDD325AFE33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoiTradding.DAL", "KoiTradding.DAL\KoiTradding.DAL.csproj", "{F7DFDF26-18DB-4AE0-A58F-9AAE6176B3BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{C67A6E7C-E867-4473-B3B2-CB6440909688}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C67A6E7C-E867-4473-B3B2-CB6440909688}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C67A6E7C-E867-4473-B3B2-CB6440909688}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93D591E0-B48A-4372-B677-BDDD325AFE33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93D591E0-B48A-4372-B677-BDDD325AFE33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93D591E0-B48A-4372-B677-BDDD325AFE33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93D591E0-B48A-4372-B677-BDDD325AFE33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7DFDF26-18DB-4AE0-A58F-9AAE6176B3BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7DFDF26-18DB-4AE0-A58F-9AAE6176B3BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7DFDF26-18DB-4AE0-A58F-9AAE6176B3BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7DFDF26-18DB-4AE0-A58F-9AAE6176B3BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
