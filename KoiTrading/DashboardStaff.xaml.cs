@@ -2,9 +2,9 @@
 
 namespace KoiTrading;
 
-public partial class Dashboard : Window
+public partial class DashboardStaff : Window
 {
-    public Dashboard()
+    public DashboardStaff()
     {
         InitializeComponent();
     }
