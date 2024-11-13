@@ -16,7 +16,7 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center"
                             Margin="0,0,20,0">
                     <Button Content="Home" Width="80" Margin="5" Background="Transparent" Foreground="White"
-                            BorderBrush="Transparent" />
+                            BorderBrush="Transparent" Click="HomeButton_Click" />
                 </StackPanel>
             </DockPanel>
 
