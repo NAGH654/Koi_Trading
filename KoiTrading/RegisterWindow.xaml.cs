@@ -1,13 +1,12 @@
 ﻿using KoiTradding.BLL.Services;
 using KoiTradding.DAL.Models;
 using System.Windows;
-
 using KoiTradding.DAL.Repositories;
 using System.Windows.Navigation;
 
 namespace KoiTrading
 {
-    public partial class RegisterWindow : Window
+    public partial class RegisterWindow
     {
         private readonly AccountService _accountService;
 
@@ -23,7 +22,7 @@ namespace KoiTrading
         private async void SignUpBtn_Click(object sender, RoutedEventArgs e)
         {
             var username = Username.Text;
-            var password = PasswordBox.Password; // Reference named PasswordBox
+            var password = PasswordBox.Password;
             var confirmPassword = ConfirmPasswordBox.Password;
 
             // Validate inputs
@@ -47,6 +46,15 @@ namespace KoiTrading
 
             try
             {
+                // Check if the email is already registered
+                bool isEmailRegistered = await _accountService.IsEmailRegisteredAsync(username);
+                
+                if (isEmailRegistered)
+                {
+                    MessageBox.Show("This email is already registered. Please log in with this email.", "Email Exists", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
                 // Create account object
                 var account = new Account
                 {

@@ -117,5 +117,16 @@ namespace KoiTradding.DAL.Repositories
         {
             return await _context.Accounts.ToListAsync();
         }
+        // Check if an email already exists in the database
+        public async Task<bool> IsEmailExistsAsync(string email)
+        {
+            return await _context.Accounts.AnyAsync(a => a.Email == email);
+        }
+
+        public async Task<bool> AddAccountAsync(Account account)
+        {
+            _context.Accounts.Add(account);
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
 }

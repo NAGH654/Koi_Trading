@@ -66,7 +66,7 @@ namespace KoiTrading
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            // Handle navigation to RegisterWindow.xaml (replace this with your registration logic)
+           
             var registerWindow = new RegisterWindow();
             registerWindow.Show();
             this.Close();

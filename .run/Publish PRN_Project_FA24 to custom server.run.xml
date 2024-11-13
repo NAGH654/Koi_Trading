@@ -1,0 +1,6 @@
+﻿<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Publish PRN_Project_FA24 to custom server" type="DotNetPublishAndUpload" factoryName="Publish to custom server" singleton="false">
+    <riderPublish configuration="Release" platform="Any CPU" runtime="Portable" target_framework="net8.0-windows" uuid_high="-7794163185807113358" uuid_low="-5298557678847853005" />
+    <method v="2" />
+  </configuration>
+</component>

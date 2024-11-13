@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿
 using KoiTradding.DAL.Models;
 
-namespace KoiTradding.DAL
+namespace KoiTradding.DAL.Repositories
 {
     public class KoiFishRepository
     {
