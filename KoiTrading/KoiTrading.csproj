@@ -19,6 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
+<<<<<<< HEAD
       <None Remove="images\add.png" />
       <Resource Include="images\add.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -75,6 +76,10 @@
       <Resource Include="images\promotion.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Resource>
+=======
+      <None Remove="images\bck.jpg" />
+      <Resource Include="images\bck.jpg" />
+>>>>>>> origin/DashboardStaff
     </ItemGroup>
 
 </Project>
