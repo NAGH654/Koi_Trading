@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:KoiTrading"
         mc:Ignorable="d"
         Title="DashboardStaff" Height="600" Width="1000">
-    <Grid Background="bisque">
+    <Grid Background="#c26e6e">
+        
         <DockPanel Background="#3B3B3B" Height="60" VerticalAlignment="Top">
             <TextBlock Text="Koi Fish Shop" FontSize="24" FontWeight="Bold" Foreground="White" 
                        VerticalAlignment="Center" Margin="20,0" DockPanel.Dock="Left"/>
