@@ -3,7 +3,7 @@ using KoiTradding.DAL.Models;
 
 namespace AirConditionerShop.DAL.Repositories
 {
-    public class StaffRepository
+    public class AccountRepository
     {
         private KoiFishTradingContext _context;
 
