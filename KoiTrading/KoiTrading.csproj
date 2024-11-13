@@ -18,4 +18,9 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="images\bck.jpg" />
+      <Resource Include="images\bck.jpg" />
+    </ItemGroup>
+
 </Project>
