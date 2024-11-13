@@ -1,12 +1,64 @@
 ﻿<Window x:Class="KoiTrading.Cart"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:KoiTrading"
-        mc:Ignorable="d"
-        Title="Cart" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="Koi Fish Shop - Shopping Cart" Height="700" Width="1000" Background="#fcfad2" WindowStartupLocation="CenterScreen" WindowStyle="None">
+    
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Background="#fcfad2">
+            <!-- Header -->
+            <DockPanel Background="#3B3B3B" Height="60" VerticalAlignment="Top">
+                <TextBlock Text="Koi Fish Shop" FontSize="24" FontWeight="Bold" Foreground="White" 
+                           VerticalAlignment="Center" Margin="20,0" DockPanel.Dock="Left"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0">
+                    <Button Content="Home" Width="80" Margin="5" Background="Transparent" Foreground="White" BorderBrush="Transparent"/>
+                    <Button Content="Shop" Width="80" Margin="5" Background="Transparent" Foreground="White" BorderBrush="Transparent"/>
+                    <Button Content="Cart" Width="80" Margin="5" Background="Transparent" Foreground="White" BorderBrush="Transparent"/>
+                    <Button Content="Contact" Width="80" Margin="5" Background="Transparent" Foreground="White" BorderBrush="Transparent"/>
+                </StackPanel>
+            </DockPanel>
+
+            <!-- Title for Cart Section -->
+            <TextBlock Text="Your Shopping Cart" FontSize="30" FontWeight="Bold" 
+                       HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,100,0,30" Foreground="#3B3B3B"/>
+
+            <!-- Cart Table Section -->
+            <Grid Margin="20,160,20,80">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Product Table -->
+                <DataGrid Name="CartItemsDataGrid" AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Image" Width="100" />
+                        <DataGridTextColumn Header="Product Name" Binding="{Binding ProductName}" Width="*" />
+                        <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="100" />
+                        <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="100" />
+                        <DataGridTextColumn Header="Total" Binding="{Binding Total}" Width="100" />
+                        <DataGridTemplateColumn Header="Action" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Remove" Background="Red" Foreground="White" Width="80"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <!-- Total and Checkout Section -->
+                <StackPanel Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,10">
+                    <TextBlock Text="Total: $0.00" FontSize="18" FontWeight="Bold" Foreground="#3B82F6"/>
+                    <Button Content="Checkout" Background="#3B82F6" Foreground="White" Width="200" FontWeight="Bold" BorderBrush="Transparent" Margin="10" Click="CheckoutButton_Click"/>
+                    <Button Content="Quit" HorizontalAlignment="Center" VerticalAlignment="Top" Width="200" Height="40" Margin="10" Background="#f44336" Foreground="White" FontWeight="Bold" BorderBrush="Transparent" Click="QuitButton_Click"/>
+                </StackPanel>
+            </Grid>
+            
+            <!-- Footer Section -->
+            <DockPanel Background="#3B3B3B" Height="60" VerticalAlignment="Bottom">
+                <TextBlock Text="Contact Us: koi.shop@example.com | Phone: +123 456 7890" 
+                           FontSize="14" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </DockPanel>
+        </Grid>
+    </ScrollViewer>
 </Window>
