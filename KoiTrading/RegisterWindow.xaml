@@ -34,24 +34,27 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <TextBlock Text="Username"
+
+                    <TextBlock Text="Email"
                                Grid.Row="0"
                                Margin="0,15"
                                HorizontalAlignment="Left" />
-                    <TextBox Grid.Row="1"
+                    <TextBox x:Name="EmailTextBox"
+                             Grid.Row="1"
                              Padding="0,5"
                              Width="255"
                              BorderThickness="0,0,0,1"
-                             HorizontalAlignment="Left"
-                             Text="" />
+                             HorizontalAlignment="Left" />
 
                     <TextBlock Text="Password"
                                Grid.Row="2"
                                Margin="0,15"
                                HorizontalAlignment="Left" />
-                    <PasswordBox Grid.Row="3"
-                                 Password=""
+                    <PasswordBox x:Name="PasswordBox"
+                                 Grid.Row="3"
                                  Padding="0,5"
                                  Width="255"
                                  BorderThickness="0,0,0,1"
@@ -61,8 +64,8 @@
                                Grid.Row="4"
                                Margin="0,15"
                                HorizontalAlignment="Left" />
-                    <PasswordBox Grid.Row="5"
-                                 Password=""
+                    <PasswordBox x:Name="ConfirmPasswordBox"
+                                 Grid.Row="5"
                                  Padding="0,5"
                                  Width="255"
                                  BorderThickness="0,0,0,1"
@@ -101,7 +104,6 @@
                     </Button.Style>
                 </Button>
 
-                <!-- Văn bản đã có tài khoản -->
                 <TextBlock HorizontalAlignment="Center" Margin="0,10">
                     <Run Text="Already have an account? " />
                     <Hyperlink NavigateUri="LoginWindow.xaml" RequestNavigate="Hyperlink_RequestNavigate">
