@@ -25,5 +25,12 @@ namespace KoiTrading
             shopListWindow.Show();
             this.Close();
         }
+        
+        private void HomeButton_Click(object sender, RoutedEventArgs e)
+        {
+            var shopListWindow = new ShopList();
+            shopListWindow.Show();
+            this.Close();
+        }
     }
 }

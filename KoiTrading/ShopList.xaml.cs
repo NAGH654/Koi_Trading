@@ -1,31 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using KoiTradding.DAL.Models;
 
 namespace KoiTrading
 {
     public partial class ShopList : Window
     {
-        private readonly List<KoiFish> _koiFishList;
+        private ObservableCollection<KoiFish> _koiFishList; // Dữ liệu mẫu
+        private readonly int _itemsPerPage = 9; 
+        private int _currentPage = 1;
 
         public ShopList()
         {
             InitializeComponent();
-            _koiFishList = GetSampleKoiFishList();
-            LoadFishList();
-
-            // Banner Images Setup (optional)
-            SetupBannerImages();
+            _koiFishList = GetSampleKoiFishList(); 
+            LoadPage(_currentPage); 
         }
 
-        private void LoadFishList()
+        private void LoadPage(int pageNumber)
         {
-            FishList.ItemsSource = _koiFishList;
+            int startIndex = (pageNumber - 1) * _itemsPerPage;
+            var paginatedList = _koiFishList.Skip(startIndex).Take(_itemsPerPage).ToList();
+            FishList.ItemsSource = paginatedList;
         }
-        
+
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -45,16 +48,7 @@ namespace KoiTrading
                 textBox.Foreground = Brushes.Gray;
             }
         }
-        private readonly int _itemsPerPage = 9; 
-        private int _currentPage = 1;
 
-        private void LoadPage(int pageNumber)
-        {
-            int startIndex = (pageNumber - 1) * _itemsPerPage;
-            var paginatedList = _koiFishList.Skip(startIndex).Take(_itemsPerPage).ToList();
-            FishList.ItemsSource = paginatedList;
-        }
-        
         private void CartButton_Click(object sender, RoutedEventArgs e)
         {
             var cartWindow = new Cart();
@@ -79,7 +73,7 @@ namespace KoiTrading
                 LoadPage(_currentPage);
             }
         }
-        
+
         private void FishList_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (FishList.SelectedItem != null)
@@ -87,15 +81,12 @@ namespace KoiTrading
                 var selectedFish = (KoiFish)FishList.SelectedItem;
                 var fishDetailWindow = new FishDetail(selectedFish);
                 fishDetailWindow.Show();
-                this.Hide();
             }
         }
 
-
-        // Dữ liệu mẫu cho 10 cá Koi
-        private List<KoiFish> GetSampleKoiFishList()
+        private ObservableCollection<KoiFish> GetSampleKoiFishList()
         {
-            return new List<KoiFish>
+            return new ObservableCollection<KoiFish>
             {
                 new KoiFish { KoiId = 1, Origin = "Japan", Gender = "Male", Age = 2, Size = 60.5m, Status = "Available", Price = 10000m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p1.png" },
                 new KoiFish { KoiId = 2, Origin = "Japan", Gender = "Female", Age = 3, Size = 55.0m, Status = "Available", Price = 8500m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p2.jpeg" },
@@ -109,24 +100,5 @@ namespace KoiTrading
                 new KoiFish { KoiId = 10, Origin = "Thailand", Gender = "Male", Age = 4, Size = 64.5m, Status = "Available", Price = 9700m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p1.png" }
             };
         }
-
-        private void SetupBannerImages()
-        {
-            // Banner setup (optional, nếu bạn đã có phần này trong code)
-            // Gọi phương thức SetupBannerImages() để hiển thị hình ảnh banner
-        }
-    }
-
-    public class KoiFish
-    {
-        public int KoiId { get; set; }
-        public string Origin { get; set; }
-        public string Gender { get; set; }
-        public int Age { get; set; }
-        public decimal Size { get; set; }
-        public string Status { get; set; }
-        public decimal Price { get; set; }
-        public string Health { get; set; }
-        public string KoiImage { get; set; }
     }
 }
