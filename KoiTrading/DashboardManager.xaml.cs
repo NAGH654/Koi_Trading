@@ -1,11 +1,17 @@
-﻿using System.Windows;
+﻿using LiveCharts;
+using LiveCharts.Wpf;
+using System.Collections.Generic;
+using System.Windows;
 
-namespace KoiTrading;
-
-public partial class DashboardManager : Window
+namespace KoiTrading
 {
-    public DashboardManager()
+    public partial class DashboardManager : Window
     {
-        InitializeComponent();
+        
+
+        public DashboardManager()
+        {
+            InitializeComponent();
+        }
     }
 }

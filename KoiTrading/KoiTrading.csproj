@@ -81,4 +81,9 @@
       <Resource Include="images\bck.jpg" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="LiveCharts" Version="0.9.6" />
+      <PackageReference Include="LiveCharts.Wpf" Version="0.9.6" />
+    </ItemGroup>
+
 </Project>

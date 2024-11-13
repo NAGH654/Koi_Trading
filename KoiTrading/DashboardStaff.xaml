@@ -8,11 +8,7 @@
         Title="DashboardStaff" Height="600" Width="1000">
     <Grid Background="#c26e6e">
 
-        <!-- DockPanel for header -->
-        <DockPanel Background="#3B3B3B" Height="60" VerticalAlignment="Top">
-            <TextBlock Text="Koi Fish Shop" FontSize="24" FontWeight="Bold" Foreground="White" 
-                       VerticalAlignment="Center" Margin="20,0" DockPanel.Dock="Left"/>
-        </DockPanel>
+        
 
         <!-- Row Definitions for the main Grid -->
         <Grid.RowDefinitions>
@@ -20,7 +16,10 @@
             <RowDefinition Height="*"/>     <!-- Content row -->
             <RowDefinition Height="Auto"/>  <!-- Buttons row -->
         </Grid.RowDefinitions>
-        
+        <DockPanel Background="#3B3B3B" Height="60" VerticalAlignment="Top">
+            <TextBlock Text="Koi Fish Shop" FontSize="24" FontWeight="Bold" Foreground="White" 
+                       VerticalAlignment="Center" Margin="20,0" DockPanel.Dock="Left"/>
+        </DockPanel>
         <!-- Main Content -->
         <Grid Grid.Row="1" Margin="10">
             <!-- Column Definitions for the content Grid -->
@@ -28,7 +27,7 @@
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-
+            
             <!-- Koi List Section -->
             <DataGrid x:Name="KoiDataGrid" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Column="0" Margin="5"
                       IsReadOnly="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
