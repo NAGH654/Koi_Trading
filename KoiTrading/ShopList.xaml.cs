@@ -18,8 +18,8 @@ namespace KoiTrading
         public ShopList()
         {
             InitializeComponent();
-            _koiFishList = GetSampleKoiFishList(); // Khởi tạo danh sách mẫu
-            LoadPage(_currentPage); // Hiển thị trang đầu tiên
+            _koiFishList = GetSampleKoiFishList(); 
+            LoadPage(_currentPage); 
         }
 
         private void LoadPage(int pageNumber)
@@ -81,7 +81,6 @@ namespace KoiTrading
                 var selectedFish = (KoiFish)FishList.SelectedItem;
                 var fishDetailWindow = new FishDetail(selectedFish);
                 fishDetailWindow.Show();
-                this.Hide();
             }
         }
 

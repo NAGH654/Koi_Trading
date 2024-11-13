@@ -1,9 +1,9 @@
 ﻿<Window x:Class="KoiTrading.ShopList"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Koi Fish Shop - Shopping List" Height="800" Width="1000" Background="#fff0ab" WindowStartupLocation="CenterScreen" FontFamily="Helvetica">
+        Title="Koi Fish Shop - Shopping List" Height="800" Width="1000" Background="Bisque" WindowStartupLocation="CenterScreen" FontFamily="Helvetica">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
+    
         <Grid>
             <!-- Header -->
             <DockPanel Background="#3B3B3B" Height="60" VerticalAlignment="Top">
@@ -16,15 +16,15 @@
                     <Button Content="Contact" Width="80" Margin="5" Background="Transparent" Foreground="White" BorderBrush="Transparent"/>
                 </StackPanel>
             </DockPanel>
-
             
-            <Image Source="pack://application:,,,/KoiTrading;component/images/banner.jpg" Height="200" Stretch="UniformToFill" Margin="0,60,0,10" VerticalAlignment="Top"/>
-
-           
-            <TextBlock Text="Koi Fish Shop - Rare Collection" FontSize="30" FontWeight="Bold" 
-                       HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,270,0,20" Foreground="#3B3B3B"/>
-
-            <!-- Main Grid -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,50,0,0">
+                <Grid>
+                    
+                    <Image Source="pack://application:,,,/KoiTrading;component/images/banner.jpg" Height="270" Stretch="UniformToFill" Margin="0,10,0,10" VerticalAlignment="Top"/>
+                    
+                    <TextBlock Text="Koi Fish Shop - Rare Collection" FontSize="30" FontWeight="Bold" 
+                               HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,290,0,20" Foreground="#3B3B3B"/>
+                    
             <Grid Margin="20,350,20,80">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"/>
@@ -48,13 +48,20 @@
                                 <StackPanel>
                                     <Image Source="{Binding KoiImage}" Width="150" Height="100" Margin="0,0,0,10" 
                                            Stretch="UniformToFill" ClipToBounds="True"/>
-                                    <TextBlock Text="{Binding Origin}" FontSize="20" FontWeight="Bold" Foreground="#1F2937"/>
-                                    <TextBlock Text="Gender: {Binding Gender}" FontSize="14" Foreground="#6B7280"/>
-                                    <TextBlock Text="Size: {Binding Size} cm" FontSize="14" Foreground="#6B7280"/>
-                                    <TextBlock Text="Age: {Binding Age} years" FontSize="14" Foreground="#6B7280"/>
-                                    <TextBlock Text="Status: {Binding Status}" FontSize="14" Foreground="#6B7280"/>
-                                    <TextBlock Text="Health: {Binding Health}" FontSize="14" Foreground="#6B7280"/>
-                                    <TextBlock Text="{Binding Price, StringFormat='{}{0:C}'}" FontSize="16" FontWeight="SemiBold" Foreground="#3B82F6" Margin="0,5,0,0"/>
+                                    <TextBlock FontSize="20" FontWeight="Bold" Foreground="#1F2937">
+                                        <Run Text="ID: " />
+                                        <Run Text="{Binding KoiId}" />
+                                    </TextBlock>
+
+                                    <TextBlock FontSize="14" FontWeight="Bold" Foreground="#1F2937">
+                                        <Run Text="Origin: " />
+                                        <Run Text="{Binding Origin}" />
+                                    </TextBlock>
+
+                                    <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#3B82F6" Margin="0,5,0,0">
+                                        <Run Text="Price: " />
+                                        <Run Text="{Binding Price, StringFormat='{}{0:C}'}" />
+                                    </TextBlock>
                                 </StackPanel>
                             </Border>
                         </DataTemplate>
@@ -62,7 +69,7 @@
                 </ListBox>
 
                 <!-- Bộ lọc sản phẩm -->
-                <Border Grid.Column="1" Grid.Row="0" Background="#fcfad2" Width="250" Padding="10" Margin="10" VerticalAlignment="Top">
+                <Border Grid.Column="1" Grid.Row="0" Background="#FCE5CD" Width="250" Padding="10" Margin="10" VerticalAlignment="Top">
                     <StackPanel>
                         <TextBlock Text="Filter by:" FontSize="18" FontWeight="Bold" Foreground="#1F2937" Margin="0,0,0,10"/>
                         <TextBlock Text="Origin:" FontSize="14" FontWeight="SemiBold" Foreground="#1F2937"/>
@@ -93,17 +100,19 @@
 
                 <!-- Nút phân trang -->
                 <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="220,20,0,0">
-                    <Button Content="Previous" Click="PreviousPage_Click" Margin="10" Background="#fcfad2" FontSize="18" Padding="10,5" Width="120"/>
+                    <Button Content="Previous" Click="PreviousPage_Click" Margin="10" Background="#3498db" Foreground="White" FontSize="18" Padding="10,5" Width="120"/>
                     <TextBlock Text="{Binding _currentPage}" FontSize="16" VerticalAlignment="Center" Margin="10"/>
-                    <Button Content="Next" Click="NextPage_Click" Margin="10" Background="#fcfad2" FontSize="18" Padding="10,5" Width="120"/>
+                    <Button Content="Next" Click="NextPage_Click" Margin="10" Background="#3498db"  Foreground="White" FontSize="18" Padding="10,5" Width="120"/>
                 </StackPanel>
             </Grid>
 
             <!-- Footer -->
             <DockPanel Background="#3B3B3B" Height="60" VerticalAlignment="Bottom">
-                <TextBlock Text="Contact Us: koi.shop@example.com | Phone: +123 456 7890" 
-                           FontSize="14" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Text="Contact Us: Koitrading.shop@gmail.com | Phone: +123 456 7890"
+                           FontSize="15" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </DockPanel>
         </Grid>
+                
     </ScrollViewer>
+        </Grid>
 </Window>

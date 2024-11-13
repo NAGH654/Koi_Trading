@@ -1,10 +1,10 @@
 ﻿<Window x:Class="KoiTrading.Cart"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Koi Fish Shop - Shopping Cart" Height="700" Width="1000" Background="#fcfad2" WindowStartupLocation="CenterScreen" WindowStyle="None">
+        Title="Koi Fish Shop - Shopping Cart" Height="700" Width="1000" Background="Bisque" FontFamily="Helvetica" WindowStartupLocation="CenterScreen" WindowStyle="None">
     
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid Background="#fcfad2">
+        <Grid Background="Bisque">
             <!-- Header -->
             <DockPanel Background="#3B3B3B" Height="60" VerticalAlignment="Top">
                 <TextBlock Text="Koi Fish Shop" FontSize="24" FontWeight="Bold" Foreground="White" 
@@ -56,8 +56,8 @@
             
             <!-- Footer Section -->
             <DockPanel Background="#3B3B3B" Height="60" VerticalAlignment="Bottom">
-                <TextBlock Text="Contact Us: koi.shop@example.com | Phone: +123 456 7890" 
-                           FontSize="14" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Text="Contact Us: Koitrading.shop@gmail.com | Phone: +123 456 7890" 
+                           FontSize="15" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </DockPanel>
         </Grid>
     </ScrollViewer>

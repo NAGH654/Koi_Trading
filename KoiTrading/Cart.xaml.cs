@@ -28,6 +28,8 @@ public partial class Cart : Window
     
     private void CheckoutButton_Click(object sender, RoutedEventArgs e)
     {
-        
+        var checkoutWindow = new CheckOut();
+        checkoutWindow.Show();
+        this.Close();
     }
 }
