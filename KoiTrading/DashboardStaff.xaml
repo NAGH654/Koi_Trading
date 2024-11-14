@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:KoiTrading"
         mc:Ignorable="d"
         Title="DashboardStaff" Height="600" Width="1000" WindowStartupLocation="CenterScreen">
+    
     <Grid Background="#c26e6e">
         
         <Grid.RowDefinitions>
@@ -51,6 +52,7 @@
             </DataGrid>
 
             
+
             <Grid Grid.Column="1" Margin="10" VerticalAlignment="Top">
               
                 <Grid.RowDefinitions>

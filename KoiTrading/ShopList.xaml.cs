@@ -56,22 +56,20 @@ namespace KoiTrading
         private void ApplyFilterButton_Click(object sender, RoutedEventArgs e)
         {
             FilterKoiFishList();
-            _currentPage = 1; // Reset to first page after filtering
+            _currentPage = 1; 
             LoadPage(_currentPage);
         }
 
         private void FilterKoiFishList()
         {
-            // Get filter values
+            
             string selectedOrigin = ((ComboBoxItem)((ComboBox)FindName("OriginComboBox")).SelectedItem).Content.ToString();
             string selectedGender = ((ComboBoxItem)((ComboBox)FindName("GenderComboBox")).SelectedItem).Content.ToString();
             decimal.TryParse(MinPriceTextBox.Text, out decimal minPrice);
             decimal.TryParse(MaxPriceTextBox.Text, out decimal maxPrice);
-
-            // Call the filtering method in the service
+            
             var filteredList = _koiFishService.FilterKoiFish(_koiFishList.ToList(), selectedOrigin, selectedGender, minPrice, maxPrice);
-
-            // Update the filtered collection
+            
             _filteredKoiFishList = new ObservableCollection<KoiFish>(filteredList);
             FishList.ItemsSource = _filteredKoiFishList;
         }

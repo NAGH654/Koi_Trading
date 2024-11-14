@@ -6,7 +6,7 @@ namespace KoiTrading
     public partial class FishDetail : Window
     {
         private KoiFish fishItem;
-
+    
         public FishDetail(KoiFish selectedFish)
         {
             InitializeComponent();
@@ -16,7 +16,6 @@ namespace KoiTrading
 
         private void BuyButton_Click(object sender, RoutedEventArgs e)
         {
-            // Open the CheckOut window and pass the selected KoiFish item to it
             var checkOutWindow = new CheckOut(fishItem);
             checkOutWindow.Show();
             this.Close();
