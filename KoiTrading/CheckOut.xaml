@@ -5,7 +5,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:KoiTrading"
         mc:Ignorable="d"
-        Title="CheckOut" Height="720" Width="1000" Background="Bisque" FontFamily="Helvetica" WindowStartupLocation="CenterScreen">
+        Title="CheckOut" Height="720" Width="1000" Background="Bisque" FontFamily="Helvetica"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -60,10 +61,7 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
-                <TextBlock Text="Total:" FontSize="18" FontWeight="SemiBold" Margin="0,20,0,0"
-                           HorizontalAlignment="Right" />
-                <TextBlock Name="TotalAmount" Text="$0.00" FontSize="18" FontWeight="SemiBold" Foreground="#3498db"
-                           HorizontalAlignment="Right" />
+
             </StackPanel>
 
             <!-- Payment Section -->
@@ -119,7 +117,12 @@
 
 
                 <!-- Confirm Payment Button -->
-                <Button Content="Confirm Payment" Width="200" Height="40" Background="#3498db" Foreground="White"
+                <TextBlock Text="Total:" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,0"
+                           HorizontalAlignment="Left" />
+                <TextBlock Name="TotalAmount" Text="$0.00" FontSize="18" FontWeight="SemiBold" Foreground="#3498db"
+                           HorizontalAlignment="Right" />
+                <Button Content="Confirm Payment" Width="200" Height="40" Margin="0, 14, 0,0" Background="#3498db"
+                        Foreground="White"
                         FontWeight="Bold" HorizontalAlignment="Center" />
             </StackPanel>
         </Grid>
