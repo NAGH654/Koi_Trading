@@ -43,6 +43,7 @@ public partial class KoiFishTradingContext : DbContext
 
         var strConn = config.GetConnectionString("DefaultConnectionStringDB");
 
+
         if (string.IsNullOrEmpty(strConn))
             throw new InvalidOperationException("Connection string 'DefaultConnectionStringDB' not found.");
 

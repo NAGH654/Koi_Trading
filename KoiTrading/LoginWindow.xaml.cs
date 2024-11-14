@@ -26,7 +26,6 @@ namespace KoiTrading
                 string email = EmailTextBox.Text ?? string.Empty;
                 string password = PasswordBox.Password ?? string.Empty;
 
-                // Validation
                 if (string.IsNullOrWhiteSpace(email))
                 {
                     MessageBox.Show("Email cannot be empty", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -38,31 +37,19 @@ namespace KoiTrading
                     MessageBox.Show("Password cannot be empty", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-                
+        
                 var account = await _accountService.LoginAsync(email, password);
 
                 if (account != null)
                 {
                     MessageBox.Show("Login successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    
-                    switch (account.RoleId)
-                    {
-                        case 1: //  Staff
-                            var dashboardStaff = new DashboardStaff();
-                            dashboardStaff.Show();
-                            break;
+            
+                    // Store the logged-in user in the UserSession
+                    UserSession.LoggedInUser = account;
 
-                        case 2: //  Manager
-                            var dashboardManager = new DashboardManager();
-                            dashboardManager.Show();
-                            break;
-
-                        default: // Cus
-                            var shopList = new ShopList();
-                            shopList.Show();
-                            break;
-                    }
-                    
+                    // Open the ShopList window
+                    var shopList = new ShopList();
+                    shopList.Show();
                     this.Close();
                 }
                 else
@@ -75,6 +62,7 @@ namespace KoiTrading
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
         
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {

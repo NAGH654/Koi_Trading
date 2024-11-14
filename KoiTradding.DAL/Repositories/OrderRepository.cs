@@ -21,25 +21,59 @@ namespace KoiTradding.DAL.Repositories
 
             ValidateOrder(order);
 
-            try
+            // Ensure all KoiFish in the order are available
+            var koiIds = order.OrderDetails.Select(od => od.KoiId).Where(id => id.HasValue).Select(id => id.Value).ToList();
+
+            if (koiIds.Count != order.OrderDetails.Count)
             {
-                await _context.Orders.AddAsync(order);
-                await _context.SaveChangesAsync();
-                return true;
+                throw new ArgumentException("All OrderDetails must have a valid KoiId.");
             }
-            catch (DbUpdateException dbEx)
+
+            // Start a database transaction to ensure atomicity
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
-                // Log exception (consider using a logging framework)
-                Console.Error.WriteLine($"Database Update Error: {dbEx.Message}");
-                return false;
-            }
-            catch (Exception ex)
-            {
-                // Log exception
-                Console.Error.WriteLine($"An error occurred while creating the order: {ex.Message}");
-                return false;
+                try
+                {
+                    // Check if all KoiFish are available
+                    var availableKoiFishes = await _context.KoiFishes
+                        .Where(k => koiIds.Contains(k.KoiId))
+                        .ToListAsync();
+
+                    if (availableKoiFishes.Count != koiIds.Count)
+                    {
+                        throw new InvalidOperationException("One or more KoiFish are no longer available.");
+                    }
+
+                    // Add the order
+                    await _context.Orders.AddAsync(order);
+                    await _context.SaveChangesAsync();
+
+                    // Remove the sold KoiFish from the database
+                    var koiToRemove = availableKoiFishes;
+                    _context.KoiFishes.RemoveRange(koiToRemove);
+                    await _context.SaveChangesAsync();
+
+                    // Commit the transaction
+                    await transaction.CommitAsync();
+                    return true;
+                }
+                catch (DbUpdateException dbEx)
+                {
+                    // Log exception
+                    Console.Error.WriteLine($"Database Update Error: {dbEx.Message}");
+                    await transaction.RollbackAsync();
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    // Log exception
+                    Console.Error.WriteLine($"An error occurred while creating the order: {ex.Message}");
+                    await transaction.RollbackAsync();
+                    return false;
+                }
             }
         }
+
 
        
         public async Task<Order?> GetOrderByIdAsync(int orderId)
@@ -180,8 +214,6 @@ namespace KoiTradding.DAL.Repositories
 
             if (string.IsNullOrWhiteSpace(order.Status))
                 throw new ArgumentException("Order status must be provided.", nameof(order.Status));
-
-            
         }
     }
 }

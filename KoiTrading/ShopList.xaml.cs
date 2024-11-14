@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -24,11 +20,16 @@ namespace KoiTrading
         public ShopList()
         {
             InitializeComponent();
+            if (UserSession.LoggedInUser != null)
+            {
+                UserGreetingTextBlock.Text = $"Hello, {UserSession.LoggedInUser.Email}";
+            }
             var context = new KoiFishTradingContext();
             var repository = new KoiFishRepository(context);
             _koiFishService = new KoiFishService(repository);
             LoadKoiFishDataAsync();
         }
+
 
         private async Task LoadKoiFishDataAsync()
         {
@@ -57,7 +58,7 @@ namespace KoiTrading
         private void ApplyFilterButton_Click(object sender, RoutedEventArgs e)
         {
             FilterKoiFishList();
-            _currentPage = 1; // Reset to first page after filtering
+            _currentPage = 1; 
             LoadPage(_currentPage);
         }
 
@@ -127,9 +128,7 @@ namespace KoiTrading
             }
         }
 
-        /// <summary>
-        /// Handles the Buy Now button click event.
-        /// </summary>
+       
         private void BuyNowButton_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && button.DataContext is KoiFish selectedFish)
