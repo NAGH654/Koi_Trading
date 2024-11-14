@@ -1,132 +1,140 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using KoiTradding.BLL.Services;
+using KoiTradding.DAL.Models;
+using KoiTradding.DAL.Repositories;
 
-namespace KoiTrading
+namespace KoiTrading;
+
+public partial class ShopList : Window
 {
-    public partial class ShopList : Window
+    private readonly int _itemsPerPage = 9;
+    private readonly KoiFishService _koiFishService;
+    private int _currentPage = 1;
+    private ObservableCollection<KoiFish> _filteredKoiFishList;
+
+    private ObservableCollection<KoiFish> _koiFishList;
+
+    public ShopList()
     {
-        private readonly List<KoiFish> _koiFishList;
-
-        public ShopList()
-        {
-            InitializeComponent();
-            _koiFishList = GetSampleKoiFishList();
-            LoadFishList();
-
-            // Banner Images Setup (optional)
-            SetupBannerImages();
-        }
-
-        private void LoadFishList()
-        {
-            FishList.ItemsSource = _koiFishList;
-        }
-        
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox textBox = sender as TextBox;
-            if (textBox != null && (textBox.Text == "Min Price" || textBox.Text == "Max Price"))
-            {
-                textBox.Text = "";
-                textBox.Foreground = Brushes.Black;
-            }
-        }
-
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox textBox = sender as TextBox;
-            if (textBox != null && string.IsNullOrWhiteSpace(textBox.Text))
-            {
-                textBox.Text = textBox.Name == "MinPriceTextBox" ? "Min Price" : "Max Price";
-                textBox.Foreground = Brushes.Gray;
-            }
-        }
-        private readonly int _itemsPerPage = 9; 
-        private int _currentPage = 1;
-
-        private void LoadPage(int pageNumber)
-        {
-            int startIndex = (pageNumber - 1) * _itemsPerPage;
-            var paginatedList = _koiFishList.Skip(startIndex).Take(_itemsPerPage).ToList();
-            FishList.ItemsSource = paginatedList;
-        }
-        
-        private void CartButton_Click(object sender, RoutedEventArgs e)
-        {
-            var cartWindow = new Cart();
-            cartWindow.Show();
-            this.Close();
-        }
-
-        private void NextPage_Click(object sender, RoutedEventArgs e)
-        {
-            if (_currentPage < (_koiFishList.Count + _itemsPerPage - 1) / _itemsPerPage)
-            {
-                _currentPage++;
-                LoadPage(_currentPage);
-            }
-        }
-
-        private void PreviousPage_Click(object sender, RoutedEventArgs e)
-        {
-            if (_currentPage > 1)
-            {
-                _currentPage--;
-                LoadPage(_currentPage);
-            }
-        }
-        
-        private void FishList_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            if (FishList.SelectedItem != null)
-            {
-                var selectedFish = (KoiFish)FishList.SelectedItem;
-                var fishDetailWindow = new FishDetail(selectedFish);
-                fishDetailWindow.Show();
-                this.Hide();
-            }
-        }
+        InitializeComponent();
+        if (UserSession.LoggedInUser != null) UserGreetingTextBlock.Text = $"Hello, {UserSession.LoggedInUser.Email}";
+        var context = new KoiFishTradingContext();
+        var repository = new KoiFishRepository(context);
+        _koiFishService = new KoiFishService(repository);
+        LoadKoiFishDataAsync();
+    }
 
 
-        // Dữ liệu mẫu cho 10 cá Koi
-        private List<KoiFish> GetSampleKoiFishList()
+    private async Task LoadKoiFishDataAsync()
+    {
+        try
         {
-            return new List<KoiFish>
-            {
-                new KoiFish { KoiId = 1, Origin = "Japan", Gender = "Male", Age = 2, Size = 60.5m, Status = "Available", Price = 10000m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p1.png" },
-                new KoiFish { KoiId = 2, Origin = "Japan", Gender = "Female", Age = 3, Size = 55.0m, Status = "Available", Price = 8500m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p2.jpeg" },
-                new KoiFish { KoiId = 3, Origin = "China", Gender = "Male", Age = 1, Size = 65.2m, Status = "Available", Price = 12000m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p3.png" },
-                new KoiFish { KoiId = 4, Origin = "Vietnam", Gender = "Female", Age = 2, Size = 58.3m, Status = "Available", Price = 9000m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p1.png" },
-                new KoiFish { KoiId = 5, Origin = "Thailand", Gender = "Male", Age = 4, Size = 62.7m, Status = "Available", Price = 9500m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p2.jpeg" },
-                new KoiFish { KoiId = 6, Origin = "Japan", Gender = "Male", Age = 5, Size = 75.0m, Status = "Available", Price = 15000m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p3.png" },
-                new KoiFish { KoiId = 7, Origin = "Japan", Gender = "Female", Age = 1, Size = 50.0m, Status = "Available", Price = 7000m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p1.png" },
-                new KoiFish { KoiId = 8, Origin = "China", Gender = "Male", Age = 3, Size = 67.8m, Status = "Available", Price = 11500m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p2.jpeg" },
-                new KoiFish { KoiId = 9, Origin = "Vietnam", Gender = "Female", Age = 2, Size = 54.0m, Status = "Available", Price = 8000m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p3.png" },
-                new KoiFish { KoiId = 10, Origin = "Thailand", Gender = "Male", Age = 4, Size = 64.5m, Status = "Available", Price = 9700m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p1.png" }
-            };
-        }
+            var koiFishData = await _koiFishService.GetAllKoiFishAsync();
+            _koiFishList = new ObservableCollection<KoiFish>(koiFishData);
+            _filteredKoiFishList = new ObservableCollection<KoiFish>(_koiFishList);
 
-        private void SetupBannerImages()
+            _currentPage = 1;
+            LoadPage(_currentPage);
+        }
+        catch (Exception ex)
         {
-            // Banner setup (optional, nếu bạn đã có phần này trong code)
-            // Gọi phương thức SetupBannerImages() để hiển thị hình ảnh banner
+            Console.WriteLine($"Error loading KoiFish data: {ex.Message}");
         }
     }
 
-    public class KoiFish
+    private void LoadPage(int pageNumber)
     {
-        public int KoiId { get; set; }
-        public string Origin { get; set; }
-        public string Gender { get; set; }
-        public int Age { get; set; }
-        public decimal Size { get; set; }
-        public string Status { get; set; }
-        public decimal Price { get; set; }
-        public string Health { get; set; }
-        public string KoiImage { get; set; }
+        var startIndex = (pageNumber - 1) * _itemsPerPage;
+        var paginatedList = _filteredKoiFishList.Skip(startIndex).Take(_itemsPerPage).ToList();
+        FishList.ItemsSource = paginatedList;
     }
+
+    private void ApplyFilterButton_Click(object sender, RoutedEventArgs e)
+    {
+        FilterKoiFishList();
+        _currentPage = 1;
+        LoadPage(_currentPage);
+    }
+
+    private void FilterKoiFishList()
+    {
+       
+        var selectedOrigin = ((ComboBoxItem)OriginComboBox.SelectedItem)?.Content.ToString() ?? "All";
+        var selectedGender = ((ComboBoxItem)GenderComboBox.SelectedItem)?.Content.ToString() ?? "All";
+        var minPriceValid = decimal.TryParse(MinPriceTextBox.Text, out var minPrice);
+        var maxPriceValid = decimal.TryParse(MaxPriceTextBox.Text, out var maxPrice);
+        
+        if (!minPriceValid) minPrice = 0;
+        if (!maxPriceValid) maxPrice = decimal.MaxValue;
+
+      
+        var filteredList =
+            _koiFishService.FilterKoiFish(_koiFishList.ToList(), selectedOrigin, selectedGender, minPrice, maxPrice);
+        
+        _filteredKoiFishList = new ObservableCollection<KoiFish>(filteredList);
+        LoadPage(_currentPage);
+    }
+
+    private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox textBox && (textBox.Text == "Min Price" || textBox.Text == "Max Price"))
+        {
+            textBox.Text = "";
+            textBox.Foreground = Brushes.Black;
+        }
+    }
+
+    private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox textBox && string.IsNullOrWhiteSpace(textBox.Text))
+        {
+            textBox.Text = textBox.Name == "MinPriceTextBox" ? "Min Price" : "Max Price";
+            textBox.Foreground = Brushes.Gray;
+        }
+    }
+
+    private void NextPage_Click(object sender, RoutedEventArgs e)
+    {
+        if (_currentPage < (_filteredKoiFishList.Count + _itemsPerPage - 1) / _itemsPerPage)
+        {
+            _currentPage++;
+            LoadPage(_currentPage);
+        }
+    }
+
+    private void PreviousPage_Click(object sender, RoutedEventArgs e)
+    {
+        if (_currentPage > 1)
+        {
+            _currentPage--;
+            LoadPage(_currentPage);
+        }
+    }
+
+    private void FishList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (FishList.SelectedItem is KoiFish selectedFish)
+        {
+            var fishDetailWindow = new FishDetail(selectedFish);
+            fishDetailWindow.Show();
+            Hide();
+        }
+    }
+
+
+    private void BuyNowButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button button && button.DataContext is KoiFish selectedFish)
+        {
+            var checkoutWindow = new CheckOut(selectedFish); // Pass the selected fish directly
+            checkoutWindow.Owner = this; // Optional: Set the owner to the current window
+            checkoutWindow.Show(); // Show the checkout window
+          
+        }
+    }
+
 }

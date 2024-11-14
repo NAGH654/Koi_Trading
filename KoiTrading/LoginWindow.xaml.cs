@@ -1,75 +1,97 @@
-﻿using KoiTradding.BLL.Services;
-using KoiTradding.DAL.Models;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
 using System.Windows.Navigation;
+using KoiTradding.BLL.Services;
+using KoiTradding.DAL.Models;
 using KoiTradding.DAL.Repositories;
 
-namespace KoiTrading
+namespace KoiTrading;
+
+public partial class LoginWindow : Window
 {
-    public partial class LoginWindow : Window
+    private readonly AccountService _accountService;
+
+    public LoginWindow()
     {
-        private readonly AccountService _accountService;
+        InitializeComponent();
+        var context = new KoiFishTradingContext();
+        var repository = new AccountRepository(context);
+        _accountService = new AccountService(repository);
+    }
 
-        public LoginWindow()
+    private async void LoginBtn_Click(object sender, RoutedEventArgs e)
+{
+    try
+    {
+        var email = EmailTextBox.Text ?? string.Empty;
+        var password = PasswordBox.Password ?? string.Empty;
+
+        if (string.IsNullOrWhiteSpace(email))
         {
-            InitializeComponent();
-            var context = new KoiFishTradingContext();
-            var repository = new AccountRepository(context);
-            _accountService = new AccountService(repository);
+            MessageBox.Show("Email cannot be empty", "Validation Error", MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return;
         }
 
-        private async void LoginBtn_Click(object sender, RoutedEventArgs e)
+        if (string.IsNullOrWhiteSpace(password))
         {
-            try
+            MessageBox.Show("Password cannot be empty", "Validation Error", MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return;
+        }
+
+        var account = await _accountService.LoginAsync(email, password);
+
+        if (account != null)
+        {
+            MessageBox.Show("Login successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            // Store the logged-in user in the UserSession
+            UserSession.LoggedInUser = account;
+
+            // Check the roleId and navigate accordingly
+            switch (account.RoleId)
             {
-                string email = ((TextBox)LogicalTreeHelper.FindLogicalNode(this, "EmailTextBox"))?.Text ?? string.Empty;
-                string password = ((PasswordBox)LogicalTreeHelper.FindLogicalNode(this, "PasswordBox"))?.Password ?? string.Empty;
+                case 1: // Admin or Manager role
+                    var dashboardStaff = new DashboardStaff();
+                    dashboardStaff.Show();
+                    break;
 
-                // Validation
-                if (string.IsNullOrWhiteSpace(email))
-                {
-                    MessageBox.Show("Email cannot be empty", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
+                case 2: // Staff role
+                    var dashboardManager = new DashboardManager();
+                    dashboardManager.Show();
+                    break;
 
-                if (string.IsNullOrWhiteSpace(password))
-                {
-                    MessageBox.Show("Password cannot be empty", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
+                case 3: // Regular User role (ShopList)
+                    var shopList = new ShopList();
+                    shopList.Show();
+                    break;
 
-                // Attempt to login
-                var account = await _accountService.LoginAsync(email, password);
-
-                if (account != null)
-                {
-                    // Login successful
-                    MessageBox.Show("Login successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                    var ShopList = new ShopList();
-                     ShopList.Show();
-                     this.Close();
-                }
-                else
-                {
-                    // Login failed
-                    MessageBox.Show("Invalid email or password", "Login Failed", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                default:
+                    MessageBox.Show("Unknown role. Cannot redirect to the appropriate dashboard.", 
+                        "Role Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    break;
             }
-            catch (Exception ex)
-            {
-                // Handle exceptions
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+
+            Close(); // Close the login window after redirecting
         }
-
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        else
         {
-            // Handle navigation to RegisterWindow.xaml (replace this with your registration logic)
-            var registerWindow = new RegisterWindow();
-            registerWindow.Show();
-            this.Close();
+            MessageBox.Show("Invalid email or password", "Login Failed", MessageBoxButton.OK,
+                MessageBoxImage.Error);
         }
+    }
+    catch (Exception ex)
+    {
+        MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
+}
+
+
+
+    private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+    {
+        var registerWindow = new RegisterWindow();
+        registerWindow.Show();
+        Close();
     }
 }

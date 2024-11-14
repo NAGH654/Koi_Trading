@@ -9,72 +9,88 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\KoiTradding.BLL\KoiTradding.BLL.csproj" />
+        <ProjectReference Include="..\KoiTradding.BLL\KoiTradding.BLL.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="appsettings.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+        <None Update="appsettings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="images\add.png" />
-      <Resource Include="images\add.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
-      <None Remove="images\close.png" />
-      <Resource Include="images\close.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
-      <None Remove="images\credit.png" />
-      <Resource Include="images\credit.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
-      <None Remove="images\left.png" />
-      <Resource Include="images\left.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
-      <None Remove="images\low.png" />
-      <Resource Include="images\low.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
-      <None Remove="images\mastercard.png" />
-      <Resource Include="images\mastercard.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
-      <None Remove="images\mini.png" />
-      <Resource Include="images\mini.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
-      <None Remove="images\remove.png" />
-      <Resource Include="images\remove.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
-      <None Remove="images\visa.png" />
-      <Resource Include="images\visa.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
-      <None Remove="images\p1.png" />
-      <Resource Include="images\p1.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
-      <None Remove="images\p2.jpeg" />
-      <Resource Include="images\p2.jpeg">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
-      <None Remove="images\p3.png" />
-      <Resource Include="images\p3.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
-      <None Remove="images\banner.jpg" />
-      <Resource Include="images\banner.jpg">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
-      <None Remove="images\promotion.png" />
-      <Resource Include="images\promotion.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
+
+        <None Remove="images\add.png"/>
+        <Resource Include="images\add.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="images\close.png"/>
+        <Resource Include="images\close.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="images\credit.png"/>
+        <Resource Include="images\credit.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="images\left.png"/>
+        <Resource Include="images\left.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="images\low.png"/>
+        <Resource Include="images\low.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="images\mastercard.png"/>
+        <Resource Include="images\mastercard.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="images\mini.png"/>
+        <Resource Include="images\mini.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="images\remove.png"/>
+        <Resource Include="images\remove.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="images\visa.png"/>
+        <Resource Include="images\visa.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="images\p1.png"/>
+        <Resource Include="images\p1.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="images\p2.jpeg"/>
+        <Resource Include="images\p2.jpeg">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="images\p3.png"/>
+        <Resource Include="images\p3.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="images\banner.jpg"/>
+        <Resource Include="images\banner.jpg">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="images\promotion.png"/>
+        <Resource Include="images\promotion.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+
+        <None Remove="images\bck.jpg"/>
+        <Resource Include="images\bck.jpg"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="LiveCharts" Version="0.9.6"/>
+        <PackageReference Include="LiveCharts.Wpf" Version="0.9.6"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Page Update="RegisterWindow.xaml">
+            <Generator>MSBuild:Compile</Generator>
+            <DependentUpon>LoginWindow.xaml.cs</DependentUpon>
+        </Page>
     </ItemGroup>
 
 </Project>

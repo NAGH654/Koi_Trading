@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace KoiTradding.DAL.Models;
 
-namespace KoiTradding.DAL.Models;
-
-public partial class OrderDetail
+public class OrderDetail
 {
     public int OrderDetailId { get; set; }
 

@@ -114,5 +114,26 @@ namespace KoiTradding.BLL.Services
         {
             return await _accountRepository.GetAllAccountsAsync();
         }
+        
+        
+       
+        public async Task<bool> IsEmailRegisteredAsync(string email)
+        {
+            return await _accountRepository.IsEmailExistsAsync(email);
+        }
+
+        public async Task<bool> AddAccountAsync(Account account)
+        {
+            try
+            {
+                 return await _accountRepository.AddAccountAsync(account);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+        }
+        
     }
 }

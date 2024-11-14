@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace KoiTradding.DAL.Models;
 
-namespace KoiTradding.DAL.Models;
-
-public partial class Certificate
+public class Certificate
 {
     public int KoiId { get; set; }
 
     public string? Name { get; set; }
 
-    public string? Image { get; set; }
+    public byte[]? Image { get; set; }
 
     public DateTime? CreateDate { get; set; }
 

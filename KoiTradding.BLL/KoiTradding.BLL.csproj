@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\KoiTradding.DAL\KoiTradding.DAL.csproj" />
+        <ProjectReference Include="..\KoiTradding.DAL\KoiTradding.DAL.csproj"/>
     </ItemGroup>
 
 </Project>

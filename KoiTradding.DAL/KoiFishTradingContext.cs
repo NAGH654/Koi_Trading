@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -32,21 +30,29 @@ public partial class KoiFishTradingContext : DbContext
     public virtual DbSet<Payment> Payments { get; set; }
 
     public virtual DbSet<Role> Roles { get; set; }
-    
+
+    // Method to retrieve connection string from appsettings.json
     private string GetConnectionString()
     {
         IConfiguration config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json",true,true)
+            .AddJsonFile("appsettings.json", true, true)
             .Build();
-        var strConn = config["ConnectionStrings: DefaultConnectionStringDB "];
+
+        var strConn = config.GetConnectionString("DefaultConnectionStringDB");
+
+
+        if (string.IsNullOrEmpty(strConn))
+            throw new InvalidOperationException("Connection string 'DefaultConnectionStringDB' not found.");
 
         return strConn;
     }
 
-
+    // Configure the context to use the SQL Server database
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer(GetConnectionString());
+    {
+        if (!optionsBuilder.IsConfigured) optionsBuilder.UseSqlServer(GetConnectionString());
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -57,7 +63,7 @@ public partial class KoiFishTradingContext : DbContext
             entity.ToTable("Account");
 
             entity.Property(e => e.AccountId)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("AccountID");
             entity.Property(e => e.Address)
                 .HasMaxLength(255)
@@ -91,7 +97,7 @@ public partial class KoiFishTradingContext : DbContext
             entity.ToTable("Category");
 
             entity.Property(e => e.CategoryId)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("CategoryID");
             entity.Property(e => e.CategoryName)
                 .HasMaxLength(100)
@@ -112,7 +118,7 @@ public partial class KoiFishTradingContext : DbContext
             entity.ToTable("Certificate");
 
             entity.Property(e => e.KoiId)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("KoiID");
             entity.Property(e => e.CreateDate).HasColumnType("datetime");
             entity.Property(e => e.Image)
@@ -135,7 +141,7 @@ public partial class KoiFishTradingContext : DbContext
             entity.ToTable("KoiFish");
 
             entity.Property(e => e.KoiId)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("KoiID");
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.Gender)
@@ -166,7 +172,7 @@ public partial class KoiFishTradingContext : DbContext
             entity.HasKey(e => e.OrderId).HasName("PK__Orders__C3905BAFADC3A3F9");
 
             entity.Property(e => e.OrderId)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("OrderID");
             entity.Property(e => e.AccountId).HasColumnName("AccountID");
             entity.Property(e => e.OrderDate).HasColumnType("datetime");
@@ -187,7 +193,7 @@ public partial class KoiFishTradingContext : DbContext
             entity.ToTable("OrderDetail");
 
             entity.Property(e => e.OrderDetailId)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("OrderDetailID");
             entity.Property(e => e.BatchId).HasColumnName("BatchID");
             entity.Property(e => e.KoiId).HasColumnName("KoiID");
@@ -213,7 +219,7 @@ public partial class KoiFishTradingContext : DbContext
             entity.ToTable("payment");
 
             entity.Property(e => e.PaymentId)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("paymentId");
             entity.Property(e => e.Amount).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.ConsignmentId).HasColumnName("ConsignmentID");
@@ -241,7 +247,7 @@ public partial class KoiFishTradingContext : DbContext
             entity.ToTable("Role");
 
             entity.Property(e => e.RoleId)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("RoleID");
             entity.Property(e => e.RoleName)
                 .HasMaxLength(50)
