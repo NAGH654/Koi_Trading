@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using KoiTradding.BLL.Services;
 using KoiTradding.DAL.Models;
 using KoiTradding.DAL.Repositories;
@@ -21,7 +22,10 @@ namespace KoiTrading
             _koiFishService = new KoiFishService(repository);
             _categoryService = new CategoryService(repository2);
             
-            LoadCategoriesAsync();
+            
+            LoadKoiDataAsync();
+            
+            
         }
         private async Task LoadCategoriesAsync()
         {
@@ -30,6 +34,30 @@ namespace KoiTrading
             CategoryComboBox.DisplayMemberPath = "CategoryName"; 
             CategoryComboBox.SelectedValuePath = "CategoryId";  
         }
+        
+        private async Task LoadKoiDataAsync()
+        {
+            var koiFishList = await _koiFishService.GetAllKoiFishAsync();
+            KoiDataGrid.ItemsSource = koiFishList;
+            await LoadCategoriesAsync();
+        }
+        
+        private void KoiDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (KoiDataGrid.SelectedItem is KoiFish selectedKoiFish)
+            {
+                OriginTextBox.Text = selectedKoiFish.Origin;
+                GenderTextBox.Text = selectedKoiFish.Gender;
+                AgeTextBox.Text = selectedKoiFish.Age.ToString();
+                SizeTextBox.Text = selectedKoiFish.Size.ToString();
+                StatusTextBox.Text = selectedKoiFish.Status;
+                PriceTextBox.Text = selectedKoiFish.Price.ToString();
+                HealthTextBox.Text = selectedKoiFish.Health;
+                CategoryComboBox.SelectedValue = selectedKoiFish.CategoryId;
+                _koiImageData = selectedKoiFish.KoiImage; 
+            }
+        }
+        
         private void SelectImageButton_Click(object sender, RoutedEventArgs e)
         {
             
@@ -86,6 +114,100 @@ namespace KoiTrading
             {
                 MessageBox.Show($"Error: {ex.Message}");
             }
+        }
+        
+        private async void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (KoiDataGrid.SelectedItem is KoiFish selectedKoiFish)
+            {
+                try
+                {
+                    selectedKoiFish.Origin = OriginTextBox.Text;
+                    selectedKoiFish.Gender = GenderTextBox.Text;
+                    selectedKoiFish.Age = int.TryParse(AgeTextBox.Text, out int age) ? age : selectedKoiFish.Age;
+                    selectedKoiFish.Size = decimal.TryParse(SizeTextBox.Text, out decimal size) ? size : selectedKoiFish.Size;
+                    selectedKoiFish.Status = StatusTextBox.Text;
+                    selectedKoiFish.Price = decimal.TryParse(PriceTextBox.Text, out decimal price) ? price : selectedKoiFish.Price;
+                    selectedKoiFish.Health = HealthTextBox.Text;
+                    selectedKoiFish.CategoryId = (int?)CategoryComboBox.SelectedValue ?? selectedKoiFish.CategoryId;
+                    
+                    if (_koiImageData != null)
+                    {
+                        selectedKoiFish.KoiImage = _koiImageData;
+                    }
+                    
+                    bool isUpdated = await _koiFishService.UpdateKoiFishAsync(selectedKoiFish);
+
+                    if (isUpdated)
+                    {
+                        MessageBox.Show("Koi Fish updated successfully.", "Update Successful", MessageBoxButton.OK, MessageBoxImage.Information);
+                        await LoadKoiDataAsync(); 
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to update Koi Fish.", "Update Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a koi fish to edit.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+        
+        private async void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (KoiDataGrid.SelectedItem is KoiFish selectedKoiFish)
+            {
+                var result = MessageBox.Show("Are you sure you want to delete this koi fish?", "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        bool isDeleted = await _koiFishService.DeleteKoiFishAsync(selectedKoiFish.KoiId);
+
+                        if (isDeleted)
+                        {
+                            MessageBox.Show("Koi Fish deleted successfully.", "Deleted", MessageBoxButton.OK, MessageBoxImage.Information);
+                            await LoadKoiDataAsync(); 
+                            ClearForm();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Failed to delete koi fish.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a koi fish to delete.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+        
+        private async void QuitButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+        private void ClearForm()
+        {
+            OriginTextBox.Text = string.Empty;
+            GenderTextBox.Text = string.Empty;
+            AgeTextBox.Text = string.Empty;
+            SizeTextBox.Text = string.Empty;
+            StatusTextBox.Text = string.Empty;
+            PriceTextBox.Text = string.Empty;
+            HealthTextBox.Text = string.Empty;
+            CategoryComboBox.SelectedIndex = -1;
+            _koiImageData = null; 
         }
     }
 }
