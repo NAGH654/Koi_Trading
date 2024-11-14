@@ -116,7 +116,7 @@ namespace KoiTradding.BLL.Services
         }
         
         
-        // Check if an email is already registered
+       
         public async Task<bool> IsEmailRegisteredAsync(string email)
         {
             return await _accountRepository.IsEmailExistsAsync(email);
