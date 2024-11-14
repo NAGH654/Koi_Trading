@@ -26,31 +26,29 @@ namespace KoiTradding.DAL.Repositories
                 if (string.IsNullOrWhiteSpace(account.Password))
                     throw new ArgumentException("Password cannot be null or empty");
 
+                // Check if the account already exists with the given email
                 if (_context.Accounts.Any(a => a.Email == account.Email))
                     throw new ArgumentException("An account with the given email already exists");
-
-                // Ensure RoleId 3 (Customer role) exists
-                var customerRole = await _context.Roles.FirstOrDefaultAsync(r => r.RoleId == 3);
-                if (customerRole == null)
-                {
-                    throw new ArgumentException("Role 'Customer' with RoleId 3 does not exist.");
-                }
-
-                
-                account.RoleId = 3;
-
-                
-                await _context.Accounts.AddAsync(account);
+                // Adding account to the database
+                _context.Accounts.Add(account);
                 await _context.SaveChangesAsync();
+
                 return true;
             }
             catch (Exception ex)
             {
-                // Log exception
+                // Log inner exception details
                 Console.WriteLine($"Error creating account: {ex.Message}");
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                    Console.WriteLine($"Stack Trace: {ex.InnerException.StackTrace}");
+                }
+
                 return false;
             }
         }
+
 
         // Read Account by ID
         public async Task<Account?> GetAccountByIdAsync(int id)

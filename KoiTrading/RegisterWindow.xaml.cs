@@ -1,9 +1,10 @@
 ﻿using KoiTradding.BLL.Services;
 using KoiTradding.DAL.Models;
-using System;
+
 using System.Windows;
 using KoiTradding.DAL.Repositories;
 using System.Windows.Navigation;
+
 
 namespace KoiTrading
 {
@@ -62,11 +63,13 @@ namespace KoiTrading
                     return;
                 }
 
+               
+
                 // Create account object
                 var account = new Account
                 {
                     Email = username,
-                    Password = password // In production, hash the password for security
+                    Password = password // Store the hashed password
                 };
 
                 bool isAccountCreated = await _accountService.CreateAccountAsync(account);
@@ -74,6 +77,8 @@ namespace KoiTrading
                 if (isAccountCreated)
                 {
                     MessageBox.Show("Account created successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    LoginWindow login = new LoginWindow();
+                    login.Show();
                     this.Close(); // Close the Register window
                 }
                 else
@@ -107,5 +112,8 @@ namespace KoiTrading
                 return false;
             }
         }
+
+        
+       
     }
 }
