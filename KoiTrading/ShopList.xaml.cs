@@ -62,21 +62,19 @@ public partial class ShopList : Window
 
     private void FilterKoiFishList()
     {
-        // Get filter values
+       
         var selectedOrigin = ((ComboBoxItem)OriginComboBox.SelectedItem)?.Content.ToString() ?? "All";
         var selectedGender = ((ComboBoxItem)GenderComboBox.SelectedItem)?.Content.ToString() ?? "All";
         var minPriceValid = decimal.TryParse(MinPriceTextBox.Text, out var minPrice);
         var maxPriceValid = decimal.TryParse(MaxPriceTextBox.Text, out var maxPrice);
-
-        // Validate price inputs
+        
         if (!minPriceValid) minPrice = 0;
         if (!maxPriceValid) maxPrice = decimal.MaxValue;
 
-        // Call the filtering method in the service
+      
         var filteredList =
             _koiFishService.FilterKoiFish(_koiFishList.ToList(), selectedOrigin, selectedGender, minPrice, maxPrice);
-
-        // Update the filtered collection
+        
         _filteredKoiFishList = new ObservableCollection<KoiFish>(filteredList);
         LoadPage(_currentPage);
     }
