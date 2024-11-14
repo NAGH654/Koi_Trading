@@ -1,6 +1,8 @@
 ﻿using KoiTradding.DAL.Models;
 using KoiTradding.DAL.Repositories;
-
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace KoiTradding.BLL.Services
 {
@@ -28,12 +30,15 @@ namespace KoiTradding.BLL.Services
                 if (account.Password.Length < 6)
                     throw new ArgumentException("Password must be at least 6 characters long");
 
+                // Set default role to "Customer" (RoleId = 3) if not provided
+                account.RoleId ??= 3;
+
                 return await _accountRepository.CreateAccountAsync(account);
             }
             catch (Exception ex)
             {
                 // Log exception or handle it
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"Error creating account: {ex.Message}");
                 return false;
             }
         }
@@ -62,12 +67,15 @@ namespace KoiTradding.BLL.Services
                 if (string.IsNullOrWhiteSpace(account.Password))
                     throw new ArgumentException("Password cannot be null or empty");
 
+                // Ensure role is set if updating account role or defaults to 3 if not set
+                account.RoleId ??= 3;
+
                 return await _accountRepository.UpdateAccountAsync(account);
             }
             catch (Exception ex)
             {
                 // Log exception or handle it
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"Error updating account: {ex.Message}");
                 return false;
             }
         }
@@ -82,7 +90,7 @@ namespace KoiTradding.BLL.Services
             catch (Exception ex)
             {
                 // Log exception or handle it
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"Error deleting account: {ex.Message}");
                 return false;
             }
         }
@@ -104,7 +112,7 @@ namespace KoiTradding.BLL.Services
             catch (Exception ex)
             {
                 // Log exception or handle it
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"Error logging in: {ex.Message}");
                 return null;
             }
         }
@@ -114,14 +122,11 @@ namespace KoiTradding.BLL.Services
         {
             return await _accountRepository.GetAllAccountsAsync();
         }
-        
-        
        
+        // Check if an email is already registered
         public async Task<bool> IsEmailRegisteredAsync(string email)
         {
             return await _accountRepository.IsEmailExistsAsync(email);
         }
-
-        
     }
 }

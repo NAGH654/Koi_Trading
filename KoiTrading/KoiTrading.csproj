@@ -86,4 +86,11 @@
       <PackageReference Include="LiveCharts.Wpf" Version="0.9.6" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Page Update="RegisterWindow.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <DependentUpon>LoginWindow.xaml.cs</DependentUpon>
+      </Page>
+    </ItemGroup>
+
 </Project>

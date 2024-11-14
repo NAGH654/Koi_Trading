@@ -13,6 +13,7 @@ namespace KoiTradding.DAL.Repositories
             _context = context;
         }
 
+        
         // Create Account
         public async Task<bool> CreateAccountAsync(Account account)
         {
@@ -28,6 +29,17 @@ namespace KoiTradding.DAL.Repositories
                 if (_context.Accounts.Any(a => a.Email == account.Email))
                     throw new ArgumentException("An account with the given email already exists");
 
+                // Ensure RoleId 3 (Customer role) exists
+                var customerRole = await _context.Roles.FirstOrDefaultAsync(r => r.RoleId == 3);
+                if (customerRole == null)
+                {
+                    throw new ArgumentException("Role 'Customer' with RoleId 3 does not exist.");
+                }
+
+                
+                account.RoleId = 3;
+
+                
                 await _context.Accounts.AddAsync(account);
                 await _context.SaveChangesAsync();
                 return true;
@@ -35,7 +47,7 @@ namespace KoiTradding.DAL.Repositories
             catch (Exception ex)
             {
                 // Log exception
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"Error creating account: {ex.Message}");
                 return false;
             }
         }

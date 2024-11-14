@@ -1,12 +1,13 @@
 ﻿using KoiTradding.BLL.Services;
 using KoiTradding.DAL.Models;
+using System;
 using System.Windows;
 using KoiTradding.DAL.Repositories;
 using System.Windows.Navigation;
 
 namespace KoiTrading
 {
-    public partial class RegisterWindow
+    public partial class RegisterWindow : Window
     {
         private readonly AccountService _accountService;
 
@@ -32,6 +33,12 @@ namespace KoiTrading
                 return;
             }
 
+            if (!IsValidEmail(username))
+            {
+                MessageBox.Show("Please enter a valid email address.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(password) || password.Length < 6)
             {
                 MessageBox.Show("Password must be at least 6 characters long.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -48,7 +55,7 @@ namespace KoiTrading
             {
                 // Check if the email is already registered
                 bool isEmailRegistered = await _accountService.IsEmailRegisteredAsync(username);
-                
+
                 if (isEmailRegistered)
                 {
                     MessageBox.Show("This email is already registered. Please log in with this email.", "Email Exists", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -85,6 +92,20 @@ namespace KoiTrading
             var loginWindow = new LoginWindow();
             loginWindow.Show();
             this.Close();
+        }
+
+        // Helper method to validate email format
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
