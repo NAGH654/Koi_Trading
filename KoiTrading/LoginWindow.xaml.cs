@@ -23,8 +23,8 @@ namespace KoiTrading
         {
             try
             {
-                string email = ((TextBox)LogicalTreeHelper.FindLogicalNode(this, "EmailTextBox"))?.Text ?? string.Empty;
-                string password = ((PasswordBox)LogicalTreeHelper.FindLogicalNode(this, "PasswordBox"))?.Password ?? string.Empty;
+                string email = EmailTextBox.Text ?? string.Empty;
+                string password = PasswordBox.Password ?? string.Empty;
 
                 // Validation
                 if (string.IsNullOrWhiteSpace(email))
@@ -47,9 +47,9 @@ namespace KoiTrading
                     // Login successful
                     MessageBox.Show("Login successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                    var ShopList = new ShopList();
-                     ShopList.Show();
-                     this.Close();
+                    var shopList = new ShopList();
+                    shopList.Show();
+                    this.Close();
                 }
                 else
                 {
@@ -63,6 +63,7 @@ namespace KoiTrading
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {

@@ -33,21 +33,30 @@ public partial class KoiFishTradingContext : DbContext
 
     public virtual DbSet<Role> Roles { get; set; }
     
+    // Method to retrieve connection string from appsettings.json
     private string GetConnectionString()
     {
         IConfiguration config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json",true,true)
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
             .Build();
-        var strConn = config["ConnectionStrings: DefaultConnectionStringDB "];
+
+        var strConn = config.GetConnectionString("DefaultConnectionStringDB");
+
+        if (string.IsNullOrEmpty(strConn))
+            throw new InvalidOperationException("Connection string 'DefaultConnectionStringDB' not found.");
 
         return strConn;
     }
 
-
+    // Configure the context to use the SQL Server database
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer(GetConnectionString());
-
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer(GetConnectionString());
+        }
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Account>(entity =>

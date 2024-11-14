@@ -16,9 +16,11 @@ namespace KoiTrading
 
         private void AddToCart_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show($"{fishItem.Origin} - {fishItem.Gender} has been added to your cart.", "Added to Cart", MessageBoxButton.OK, MessageBoxImage.Information);
+            // Open the CheckOut window and pass the selected KoiFish item to it
+            var checkOutWindow = new CheckOut(fishItem);
+            checkOutWindow.Show();
+            this.Close();
         }
-        
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             var shopListWindow = new ShopList();

@@ -11,22 +11,50 @@ namespace KoiTrading
 {
     public partial class ShopList : Window
     {
-        private ObservableCollection<KoiFish> _koiFishList; // Dữ liệu mẫu
+        private ObservableCollection<KoiFish> _koiFishList; // Original data list
+        private ObservableCollection<KoiFish> _filteredKoiFishList; // Filtered data list
         private readonly int _itemsPerPage = 9; 
         private int _currentPage = 1;
 
         public ShopList()
         {
             InitializeComponent();
-            _koiFishList = GetSampleKoiFishList(); 
-            LoadPage(_currentPage); 
+            _koiFishList = GetSampleKoiFishList();
+            _filteredKoiFishList = new ObservableCollection<KoiFish>(_koiFishList); // Initialize filtered list
+            LoadPage(_currentPage);
         }
 
         private void LoadPage(int pageNumber)
         {
             int startIndex = (pageNumber - 1) * _itemsPerPage;
-            var paginatedList = _koiFishList.Skip(startIndex).Take(_itemsPerPage).ToList();
+            var paginatedList = _filteredKoiFishList.Skip(startIndex).Take(_itemsPerPage).ToList();
             FishList.ItemsSource = paginatedList;
+        }
+
+        private void ApplyFilterButton_Click(object sender, RoutedEventArgs e)
+        {
+            FilterKoiFishList();
+            _currentPage = 1; // Reset to first page after filtering
+            LoadPage(_currentPage);
+        }
+
+        private void FilterKoiFishList()
+        {
+            // Get filter values
+            string selectedOrigin = ((ComboBoxItem)((ComboBox)FindName("OriginComboBox")).SelectedItem).Content.ToString();
+            string selectedGender = ((ComboBoxItem)((ComboBox)FindName("GenderComboBox")).SelectedItem).Content.ToString();
+            decimal.TryParse(MinPriceTextBox.Text, out decimal minPrice);
+            decimal.TryParse(MaxPriceTextBox.Text, out decimal maxPrice);
+
+            // Filter logic
+            _filteredKoiFishList = new ObservableCollection<KoiFish>(_koiFishList.Where(k =>
+                (selectedOrigin == "All" || k.Origin == selectedOrigin) &&
+                (selectedGender == "All" || k.Gender == selectedGender) &&
+                (minPrice == 0 || (k.Price >= minPrice)) &&
+                (maxPrice == 0 || (k.Price <= maxPrice))
+            ));
+
+            FishList.ItemsSource = _filteredKoiFishList;
         }
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
@@ -49,16 +77,9 @@ namespace KoiTrading
             }
         }
 
-        private void CartButton_Click(object sender, RoutedEventArgs e)
-        {
-            var cartWindow = new Cart();
-            cartWindow.Show();
-            this.Close();
-        }
-
         private void NextPage_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentPage < (_koiFishList.Count + _itemsPerPage - 1) / _itemsPerPage)
+            if (_currentPage < (_filteredKoiFishList.Count + _itemsPerPage - 1) / _itemsPerPage)
             {
                 _currentPage++;
                 LoadPage(_currentPage);

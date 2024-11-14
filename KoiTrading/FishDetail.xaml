@@ -56,7 +56,7 @@
                     <Run Text="Price: " />
                     <Run Text="{Binding Price, StringFormat='{}{0:C}'}" />
                 </TextBlock>
-                <Button Content="Add to Cart" Width="150" Height="40" Background="#3B82F6" Foreground="White"
+                <Button Content="Buy now" Width="150" Height="40" Background="#3B82F6" Foreground="White"
                         FontWeight="Bold"
                         HorizontalAlignment="Center" Margin="0,20,0,0" Click="AddToCart_Click" />
                 <Button Content="Back" Width="100" Height="40" Background="Red" Foreground="White" FontWeight="Bold"

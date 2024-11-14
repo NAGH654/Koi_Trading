@@ -36,26 +36,26 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="User Name" 
-                   Grid.Row="0"
-                   Margin="0,15"
-                   HorizontalAlignment="Left"/>
-                <TextBox  Grid.Column="1"
-                  Grid.Row="1"
-                  Padding="0,5"
-                  Width="255"
-                  BorderThickness="0,0,0,1"
-                  HorizontalAlignment="Left"
-                  Text=""/>
+                           Grid.Row="0"
+                           Margin="0,15"
+                           HorizontalAlignment="Left"/>
+                <TextBox x:Name="EmailTextBox"
+                         Grid.Row="1"
+                         Padding="0,5"
+                         Width="255"
+                         BorderThickness="0,0,0,1"
+                         HorizontalAlignment="Left"/>
+                
                 <TextBlock Text="Password" 
-                   Grid.Row="2"
-                   Margin="0,15"
-                   HorizontalAlignment="Left"/>
-                <PasswordBox Grid.Row="3"
-                      Password=""
-                      Padding="0,5"                           
-                      Width="255"
-                      BorderThickness="0,0,0,1"
-                      HorizontalAlignment="Left"/>
+                           Grid.Row="2"
+                           Margin="0,15"
+                           HorizontalAlignment="Left"/>
+                <PasswordBox x:Name="PasswordBox"
+                             Grid.Row="3"
+                             Padding="0,5"                           
+                             Width="255"
+                             BorderThickness="0,0,0,1"
+                             HorizontalAlignment="Left"/>
             </Grid>
             <TextBlock Text="forgot password?" 
                        HorizontalAlignment="Right"/>
