@@ -123,6 +123,7 @@ namespace KoiTrading
             {
                 var fishDetailWindow = new FishDetail(selectedFish);
                 fishDetailWindow.Show();
+                this.Hide();
             }
         }
 

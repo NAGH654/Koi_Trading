@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:KoiTrading"
         mc:Ignorable="d"
-        Title="CheckOut" Height="720" Width="1000" Background="Bisque" FontFamily="Helvetica"
+        Title="CheckOut" Height="750" Width="1000" Background="Bisque" FontFamily="Helvetica"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>

@@ -14,7 +14,7 @@ namespace KoiTrading
             DataContext = selectedFish;
         }
 
-        private void AddToCart_Click(object sender, RoutedEventArgs e)
+        private void BuyButton_Click(object sender, RoutedEventArgs e)
         {
             // Open the CheckOut window and pass the selected KoiFish item to it
             var checkOutWindow = new CheckOut(fishItem);
