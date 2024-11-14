@@ -1,6 +1,7 @@
 ﻿using KoiTradding.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace KoiTradding.DAL.Repositories
 {
     public class OrderRepository
@@ -9,90 +10,178 @@ namespace KoiTradding.DAL.Repositories
 
         public OrderRepository(KoiFishTradingContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        // Create Order
+        
         public async Task<bool> CreateOrderAsync(Order order)
         {
+            if (order == null)
+                throw new ArgumentNullException(nameof(order));
+
+            ValidateOrder(order);
+
             try
             {
-                // Validation
-                if (order.AccountId == null || order.AccountId <= 0)
-                    throw new ArgumentException("Account ID must be provided and greater than zero.");
-                
-                if (order.TotalPrice == null || order.TotalPrice <= 0)
-                    throw new ArgumentException("Total price must be provided and greater than zero.");
-
                 await _context.Orders.AddAsync(order);
                 await _context.SaveChangesAsync();
                 return true;
             }
+            catch (DbUpdateException dbEx)
+            {
+                // Log exception (consider using a logging framework)
+                Console.Error.WriteLine($"Database Update Error: {dbEx.Message}");
+                return false;
+            }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                // Log exception
+                Console.Error.WriteLine($"An error occurred while creating the order: {ex.Message}");
                 return false;
             }
         }
 
-        // Read Order by ID
+       
         public async Task<Order?> GetOrderByIdAsync(int orderId)
         {
-            return await _context.Orders
-                .Include(o => o.Account)
-                .Include(o => o.OrderDetails)
-                .Include(o => o.Payments)
-                .FirstOrDefaultAsync(o => o.OrderId == orderId);
+            if (orderId <= 0)
+                throw new ArgumentException("Order ID must be greater than zero.", nameof(orderId));
+
+            try
+            {
+                return await _context.Orders
+                    .Include(o => o.Account)
+                    .Include(o => o.OrderDetails)
+                        .ThenInclude(od => od.Koi)
+                    .Include(o => o.Payments)
+                    .FirstOrDefaultAsync(o => o.OrderId == orderId);
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                Console.Error.WriteLine($"An error occurred while retrieving the order: {ex.Message}");
+                return null;
+            }
         }
 
-        // Update Order
+       
         public async Task<bool> UpdateOrderAsync(Order order)
         {
+            if (order == null)
+                throw new ArgumentNullException(nameof(order));
+
+            ValidateOrder(order, isUpdate: true);
+
             try
             {
                 var existingOrder = await _context.Orders.FindAsync(order.OrderId);
                 if (existingOrder == null)
-                    throw new ArgumentException("Order not found");
+                    throw new KeyNotFoundException($"Order with ID {order.OrderId} not found.");
 
+                // Update fields
+                existingOrder.AccountId = order.AccountId;
+                existingOrder.OrderDate = order.OrderDate;
                 existingOrder.TotalPrice = order.TotalPrice;
                 existingOrder.Status = order.Status;
-                existingOrder.OrderDate = order.OrderDate;
 
                 _context.Orders.Update(existingOrder);
                 await _context.SaveChangesAsync();
                 return true;
             }
+            catch (DbUpdateConcurrencyException concEx)
+            {
+                // Handle concurrency issues
+                Console.Error.WriteLine($"Concurrency error: {concEx.Message}");
+                return false;
+            }
+            catch (DbUpdateException dbEx)
+            {
+                // Handle database update issues
+                Console.Error.WriteLine($"Database Update Error: {dbEx.Message}");
+                return false;
+            }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                // Handle other exceptions
+                Console.Error.WriteLine($"An error occurred while updating the order: {ex.Message}");
                 return false;
             }
         }
 
-        // Delete Order
+       
         public async Task<bool> DeleteOrderAsync(int orderId)
         {
+            if (orderId <= 0)
+                throw new ArgumentException("Order ID must be greater than zero.", nameof(orderId));
+
             try
             {
-                var order = await _context.Orders.FindAsync(orderId);
-                if (order == null)
-                    throw new ArgumentException("Order not found");
+                var order = await _context.Orders
+                    .Include(o => o.OrderDetails)
+                    .Include(o => o.Payments)
+                    .FirstOrDefaultAsync(o => o.OrderId == orderId);
 
+                if (order == null)
+                    throw new KeyNotFoundException($"Order with ID {orderId} not found.");
+
+                // Remove related entities if necessary
+                _context.OrderDetails.RemoveRange(order.OrderDetails);
+                _context.Payments.RemoveRange(order.Payments);
                 _context.Orders.Remove(order);
+
                 await _context.SaveChangesAsync();
                 return true;
             }
+            catch (DbUpdateException dbEx)
+            {
+                // Handle database update issues
+                Console.Error.WriteLine($"Database Update Error: {dbEx.Message}");
+                return false;
+            }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                // Handle other exceptions
+                Console.Error.WriteLine($"An error occurred while deleting the order: {ex.Message}");
                 return false;
             }
         }
 
-        // List All Orders
+       
         public async Task<List<Order>> GetAllOrdersAsync()
         {
-            return await _context.Orders.Include(o => o.OrderDetails).ToListAsync();
+            try
+            {
+                return await _context.Orders
+                    .Include(o => o.Account)
+                    .Include(o => o.OrderDetails)
+                        .ThenInclude(od => od.Koi)
+                    .Include(o => o.Payments)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                Console.Error.WriteLine($"An error occurred while retrieving all orders: {ex.Message}");
+                return new List<Order>();
+            }
+        }
+
+      
+        private void ValidateOrder(Order order, bool isUpdate = false)
+        {
+            if (!isUpdate && order.OrderId != 0)
+                throw new ArgumentException("Order ID should not be set for a new order.", nameof(order.OrderId));
+
+            if (order.AccountId == null || order.AccountId <= 0)
+                throw new ArgumentException("Account ID must be provided and greater than zero.", nameof(order.AccountId));
+
+            if (order.TotalPrice == null || order.TotalPrice <= 0)
+                throw new ArgumentException("Total price must be provided and greater than zero.", nameof(order.TotalPrice));
+
+            if (string.IsNullOrWhiteSpace(order.Status))
+                throw new ArgumentException("Order status must be provided.", nameof(order.Status));
+
+            
         }
     }
 }

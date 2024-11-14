@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -63,17 +64,21 @@ namespace KoiTrading
         private void FilterKoiFishList()
         {
             // Get filter values
-            string selectedOrigin = ((ComboBoxItem)((ComboBox)FindName("OriginComboBox")).SelectedItem).Content.ToString();
-            string selectedGender = ((ComboBoxItem)((ComboBox)FindName("GenderComboBox")).SelectedItem).Content.ToString();
-            decimal.TryParse(MinPriceTextBox.Text, out decimal minPrice);
-            decimal.TryParse(MaxPriceTextBox.Text, out decimal maxPrice);
+            string selectedOrigin = ((ComboBoxItem)OriginComboBox.SelectedItem)?.Content.ToString() ?? "All";
+            string selectedGender = ((ComboBoxItem)GenderComboBox.SelectedItem)?.Content.ToString() ?? "All";
+            bool minPriceValid = decimal.TryParse(MinPriceTextBox.Text, out decimal minPrice);
+            bool maxPriceValid = decimal.TryParse(MaxPriceTextBox.Text, out decimal maxPrice);
+
+            // Validate price inputs
+            if (!minPriceValid) minPrice = 0;
+            if (!maxPriceValid) maxPrice = decimal.MaxValue;
 
             // Call the filtering method in the service
             var filteredList = _koiFishService.FilterKoiFish(_koiFishList.ToList(), selectedOrigin, selectedGender, minPrice, maxPrice);
 
             // Update the filtered collection
             _filteredKoiFishList = new ObservableCollection<KoiFish>(filteredList);
-            FishList.ItemsSource = _filteredKoiFishList;
+            LoadPage(_currentPage);
         }
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
@@ -118,6 +123,19 @@ namespace KoiTrading
             {
                 var fishDetailWindow = new FishDetail(selectedFish);
                 fishDetailWindow.Show();
+            }
+        }
+
+        /// <summary>
+        /// Handles the Buy Now button click event.
+        /// </summary>
+        private void BuyNowButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.DataContext is KoiFish selectedFish)
+            {
+                var checkoutWindow = new CheckOut(selectedFish);
+                checkoutWindow.Owner = this; // Optional: Set the owner to the current window
+                checkoutWindow.Show();
             }
         }
     }

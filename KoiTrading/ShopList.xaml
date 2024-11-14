@@ -62,18 +62,25 @@
                                         <Run Text="Price: " />
                                         <Run Text="{Binding Price, StringFormat='{}{0:C}'}" />
                                     </TextBlock>
+                                    <!-- Buy Now Button -->
+                                    <Button Content="Buy Now" Width="100" Height="30" Margin="0,10,0,0"
+                                            Background="#3B82F6" Foreground="White" FontWeight="Bold"
+                                            Click="BuyNowButton_Click"/>
+                                    
                                 </StackPanel>
                             </Border>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
 
+                
                 <!-- Bộ lọc sản phẩm -->
                 <Border Grid.Column="1" Grid.Row="0" Background="#FCE5CD" Width="250" Padding="10" Margin="10" VerticalAlignment="Top">
                     <StackPanel>
                         <TextBlock Text="Filter by:" FontSize="18" FontWeight="Bold" Foreground="#1F2937" Margin="0,0,0,10"/>
+        
                         <TextBlock Text="Origin:" FontSize="14" FontWeight="SemiBold" Foreground="#1F2937"/>
-                        <ComboBox Width="150" Margin="0,5,0,15">
+                        <ComboBox x:Name="OriginComboBox" Width="150" Margin="0,5,0,15">
                             <ComboBoxItem Content="All"/>
                             <ComboBoxItem Content="Japan"/>
                             <ComboBoxItem Content="China"/>
@@ -82,7 +89,7 @@
                         </ComboBox>
 
                         <TextBlock Text="Gender:" FontSize="14" FontWeight="SemiBold" Foreground="#1F2937"/>
-                        <ComboBox Width="150" Margin="0,5,0,15">
+                        <ComboBox x:Name="GenderComboBox" Width="150" Margin="0,5,0,15">
                             <ComboBoxItem Content="All"/>
                             <ComboBoxItem Content="Male"/>
                             <ComboBoxItem Content="Female"/>
@@ -94,9 +101,11 @@
                         <TextBox Width="150" Margin="0,5,0,15" Name="MaxPriceTextBox" Text="Max Price" Foreground="Gray"
                                  GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
 
-                        <Button Content="Apply Filter" Width="150" Background="#3B82F6" Foreground="White" FontWeight="Bold" BorderBrush="Transparent"/>
+                        <Button Content="Apply Filter" Width="150" Background="#3B82F6" Foreground="White" FontWeight="Bold" BorderBrush="Transparent"
+                                Click="ApplyFilterButton_Click"/>
                     </StackPanel>
                 </Border>
+
 
                 <!-- Nút phân trang -->
                 <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="220,20,0,0">

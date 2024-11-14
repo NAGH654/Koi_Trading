@@ -13,7 +13,7 @@ namespace KoiTrading
         public CheckOut(KoiFish fishItem)
         {
             InitializeComponent();
-            
+
             // Initialize the cart with the selected KoiFish item
             _cartItems = new List<KoiFish> { fishItem };
             CartItemsList.ItemsSource = _cartItems;
