@@ -10,22 +10,7 @@
         
         <!-- TabControl to display tabs -->
         <TabControl Name="MainTabControl">
-            <!-- Tab 1 -->
-            <TabItem Header="Analytics">
-                <Grid>
-                    <lvc:CartesianChart>
-                        <lvc:CartesianChart.Series>
-                            <lvc:ColumnSeries Title="Sales" Values="{Binding SalesValues}" />
-                        </lvc:CartesianChart.Series>
-                        <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Title="Months" Labels="Jan,Feb,Mar,Apr,May" />
-                        </lvc:CartesianChart.AxisX>
-                        <lvc:CartesianChart.AxisY>
-                            <lvc:Axis Title="Revenue" />
-                        </lvc:CartesianChart.AxisY>
-                    </lvc:CartesianChart>
-                </Grid>
-            </TabItem>
+            
             
             <!-- Tab 2 -->
             <TabItem Header="User">
@@ -50,14 +35,13 @@
             <DataGrid x:Name="EmployeeDataGrid" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Column="0" Margin="5"
                       IsReadOnly="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                       Background="White" RowBackground="#E6E6FA" AlternatingRowBackground="#F5F5F5"
-                      ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                      ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="EmployeeDataGrid_SelectionChanged">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Account ID" Binding="{Binding AccountID}" Width="*"/>
+                    <DataGridTextColumn Header="Account ID" Binding="{Binding AccountId}" Width="*"/>
                     <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
                     <DataGridTextColumn Header="Password" Binding="{Binding Password}" Width="*"/>
                     <DataGridTextColumn Header="Full Name" Binding="{Binding FullName}" Width="*"/>
                     <DataGridTextColumn Header="Phone" Binding="{Binding Phone}" Width="*"/>
-                    <DataGridTextColumn Header="Role" Binding="{Binding RoleName}" Width="*"/>
                     <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
                     <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="*"/>
                 </DataGrid.Columns>
@@ -82,8 +66,7 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Labels and Input Fields for Employee Details -->
-                <Label Content="Account ID" Grid.Row="0" Margin="5"/>
-                <TextBox x:Name="AccountIDTextBox" Width="150" Height="30" Margin="5" Grid.Row="0" Grid.Column="1"/>
+               
 
                 <Label Content="Email" Grid.Row="1" Margin="5"/>
                 <TextBox x:Name="EmailTextBox" Width="150" Height="30" Margin="5" Grid.Row="1" Grid.Column="1"/>
@@ -97,9 +80,6 @@
                 <Label Content="Phone" Grid.Row="4" Margin="5"/>
                 <TextBox x:Name="PhoneTextBox" Width="150" Height="30" Margin="5" Grid.Row="4" Grid.Column="1"/>
 
-                <Label Content="Role" Grid.Row="5" Margin="5"/>
-                <ComboBox x:Name="RoleComboBox" Width="150" Height="30" Margin="5" Grid.Row="5" Grid.Column="1"/>
-
                 <Label Content="Status" Grid.Row="6" Margin="5"/>
                 <TextBox x:Name="StatusTextBox" Width="150" Height="30" Margin="5" Grid.Row="6" Grid.Column="1"/>
 
@@ -110,10 +90,9 @@
 
         <!-- CRUD Buttons -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-            <Button Content="Add Employee" Width="150" Height="40" Margin="5" />
-            <Button Content="Edit Employee" Width="150" Height="40" Margin="5" />
-            <Button Content="Delete Employee" Width="150" Height="40" Margin="5" />
-            <Button Content="Refresh List" Width="150" Height="40" Margin="5" />
+            <Button Content="Add Employee" Width="150" Height="40" Margin="5" Click="AddButton_Click"/>
+            <Button Content="Edit Employee" Width="150" Height="40" Margin="5" Click="EditButton_Click" />
+            <Button Content="Delete Employee" Width="150" Height="40" Margin="5" Click="DeleteButton_Click"/>
         </StackPanel>
     </Grid>
             </TabItem>
@@ -133,27 +112,15 @@
             </Grid.ColumnDefinitions>
             
             <!-- Koi List Section -->
-            <DataGrid x:Name="KoiDataGrid" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Column="0" Margin="5"
+            <DataGrid x:Name="OrderDataGrid" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Column="0" Margin="5"
                       IsReadOnly="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                       Background="White" RowBackground="#E6E6FA" AlternatingRowBackground="#F5F5F5"
                       ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="KoiID" Binding="{Binding KoiID}" Width="*"/>
-                    <DataGridTextColumn Header="Origin" Binding="{Binding Origin}" Width="*"/>
-                    <DataGridTextColumn Header="Gender" Binding="{Binding Gender}" Width="*"/>
-                    <DataGridTextColumn Header="Age" Binding="{Binding Age}" Width="*"/>
-                    <DataGridTextColumn Header="Size" Binding="{Binding Size}" Width="*"/>
-                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
-                    <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="*"/>
-                    <DataGridTextColumn Header="CategoryID" Binding="{Binding CategoryID}" Width="*"/>
-                    <DataGridTextColumn Header="Health" Binding="{Binding Health}" Width="*"/>
-                    <DataGridTemplateColumn Header="KoiImage" Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Image Source="{Binding KoiImage}" Height="50"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="KoiID" Binding="{Binding OrderId}" Width="*"/>
+                    <DataGridTextColumn Header="Origin" Binding="{Binding AccountId}" Width="*"/>
+                    <DataGridTextColumn Header="Gender" Binding="{Binding OrderDate}" Width="*"/>
+                    <DataGridTextColumn Header="Age" Binding="{Binding TotalPrice}" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
 
