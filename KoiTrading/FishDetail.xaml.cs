@@ -14,9 +14,11 @@ namespace KoiTrading
             DataContext = selectedFish;
         }
 
-        private void AddToCart_Click(object sender, RoutedEventArgs e)
+        private void Buy_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show($"{fishItem.Origin} - {fishItem.Gender} has been added to your cart.", "Added to Cart", MessageBoxButton.OK, MessageBoxImage.Information);
+            var checkoutWindow = new CheckOut();
+            checkoutWindow.Show();
+            this.Close();
         }
         
         private void BackButton_Click(object sender, RoutedEventArgs e)

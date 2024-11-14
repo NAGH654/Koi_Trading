@@ -48,13 +48,7 @@ namespace KoiTrading
                 textBox.Foreground = Brushes.Gray;
             }
         }
-
-        private void CartButton_Click(object sender, RoutedEventArgs e)
-        {
-            var cartWindow = new Cart();
-            cartWindow.Show();
-            this.Close();
-        }
+        
 
         private void NextPage_Click(object sender, RoutedEventArgs e)
         {

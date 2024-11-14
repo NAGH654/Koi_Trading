@@ -39,7 +39,7 @@ public partial class KoiFishTradingContext : DbContext
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json",true,true)
             .Build();
-        var strConn = config["ConnectionStrings: DefaultConnectionStringDB "];
+        var strConn = config["ConnectionStrings:DefaultConnectionStringDB"];
 
         return strConn;
     }

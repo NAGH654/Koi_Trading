@@ -40,10 +40,5 @@ public partial class CheckOut : Window
             selectedPaymentMethod = radioButton.Content.ToString();
         }
     }
-    private void CartButton_Click(object sender, RoutedEventArgs e)
-    {
-        var cartWindow = new Cart();
-        cartWindow.Show();
-        this.Hide();
-    }
+   
 }

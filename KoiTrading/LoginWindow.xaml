@@ -35,7 +35,7 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="User Name" 
+                <TextBlock Text="Email" 
                    Grid.Row="0"
                    Margin="0,15"
                    HorizontalAlignment="Left"/>

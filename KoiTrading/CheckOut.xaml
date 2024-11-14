@@ -23,8 +23,6 @@
                         BorderBrush="Transparent" />
                 <Button Content="Shop" Width="80" Margin="5" Background="Transparent" Foreground="White"
                         BorderBrush="Transparent" />
-                <Button Content="Cart" Width="80" Margin="5" Background="Transparent" Foreground="White"
-                        BorderBrush="Transparent" Click="CartButton_Click" />
                 <Button Content="Contact" Width="80" Margin="5" Background="Transparent" Foreground="White"
                         BorderBrush="Transparent" />
             </StackPanel>
