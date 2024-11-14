@@ -5,23 +5,45 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using KoiTradding.BLL.Services;
 using KoiTradding.DAL.Models;
+using KoiTradding.DAL.Repositories;
 
 namespace KoiTrading
 {
     public partial class ShopList : Window
     {
-        private ObservableCollection<KoiFish> _koiFishList; // Original data list
-        private ObservableCollection<KoiFish> _filteredKoiFishList; // Filtered data list
-        private readonly int _itemsPerPage = 9; 
+        private readonly KoiFishService _koiFishService;
+        private readonly int _itemsPerPage = 9;
         private int _currentPage = 1;
+
+        private ObservableCollection<KoiFish> _koiFishList; 
+        private ObservableCollection<KoiFish> _filteredKoiFishList; 
 
         public ShopList()
         {
             InitializeComponent();
-            _koiFishList = GetSampleKoiFishList();
-            _filteredKoiFishList = new ObservableCollection<KoiFish>(_koiFishList); // Initialize filtered list
-            LoadPage(_currentPage);
+            var context = new KoiFishTradingContext();
+            var repository = new KoiFishRepository(context);
+            _koiFishService = new KoiFishService(repository);
+            LoadKoiFishDataAsync();
+        }
+
+        private async Task LoadKoiFishDataAsync()
+        {
+            try
+            {
+                var koiFishData = await _koiFishService.GetAllKoiFishAsync();
+                _koiFishList = new ObservableCollection<KoiFish>(koiFishData);
+                _filteredKoiFishList = new ObservableCollection<KoiFish>(_koiFishList);
+
+                _currentPage = 1;
+                LoadPage(_currentPage);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading KoiFish data: {ex.Message}");
+            }
         }
 
         private void LoadPage(int pageNumber)
@@ -46,21 +68,17 @@ namespace KoiTrading
             decimal.TryParse(MinPriceTextBox.Text, out decimal minPrice);
             decimal.TryParse(MaxPriceTextBox.Text, out decimal maxPrice);
 
-            // Filter logic
-            _filteredKoiFishList = new ObservableCollection<KoiFish>(_koiFishList.Where(k =>
-                (selectedOrigin == "All" || k.Origin == selectedOrigin) &&
-                (selectedGender == "All" || k.Gender == selectedGender) &&
-                (minPrice == 0 || (k.Price >= minPrice)) &&
-                (maxPrice == 0 || (k.Price <= maxPrice))
-            ));
+            // Call the filtering method in the service
+            var filteredList = _koiFishService.FilterKoiFish(_koiFishList.ToList(), selectedOrigin, selectedGender, minPrice, maxPrice);
 
+            // Update the filtered collection
+            _filteredKoiFishList = new ObservableCollection<KoiFish>(filteredList);
             FishList.ItemsSource = _filteredKoiFishList;
         }
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            TextBox textBox = sender as TextBox;
-            if (textBox != null && (textBox.Text == "Min Price" || textBox.Text == "Max Price"))
+            if (sender is TextBox textBox && (textBox.Text == "Min Price" || textBox.Text == "Max Price"))
             {
                 textBox.Text = "";
                 textBox.Foreground = Brushes.Black;
@@ -69,8 +87,7 @@ namespace KoiTrading
 
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            TextBox textBox = sender as TextBox;
-            if (textBox != null && string.IsNullOrWhiteSpace(textBox.Text))
+            if (sender is TextBox textBox && string.IsNullOrWhiteSpace(textBox.Text))
             {
                 textBox.Text = textBox.Name == "MinPriceTextBox" ? "Min Price" : "Max Price";
                 textBox.Foreground = Brushes.Gray;
@@ -97,29 +114,11 @@ namespace KoiTrading
 
         private void FishList_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (FishList.SelectedItem != null)
+            if (FishList.SelectedItem is KoiFish selectedFish)
             {
-                var selectedFish = (KoiFish)FishList.SelectedItem;
                 var fishDetailWindow = new FishDetail(selectedFish);
                 fishDetailWindow.Show();
             }
-        }
-
-        private ObservableCollection<KoiFish> GetSampleKoiFishList()
-        {
-            return new ObservableCollection<KoiFish>
-            {
-                new KoiFish { KoiId = 1, Origin = "Japan", Gender = "Male", Age = 2, Size = 60.5m, Status = "Available", Price = 10000m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p1.png" },
-                new KoiFish { KoiId = 2, Origin = "Japan", Gender = "Female", Age = 3, Size = 55.0m, Status = "Available", Price = 8500m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p2.jpeg" },
-                new KoiFish { KoiId = 3, Origin = "China", Gender = "Male", Age = 1, Size = 65.2m, Status = "Available", Price = 12000m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p3.png" },
-                new KoiFish { KoiId = 4, Origin = "Vietnam", Gender = "Female", Age = 2, Size = 58.3m, Status = "Available", Price = 9000m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p1.png" },
-                new KoiFish { KoiId = 5, Origin = "Thailand", Gender = "Male", Age = 4, Size = 62.7m, Status = "Available", Price = 9500m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p2.jpeg" },
-                new KoiFish { KoiId = 6, Origin = "Japan", Gender = "Male", Age = 5, Size = 75.0m, Status = "Available", Price = 15000m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p3.png" },
-                new KoiFish { KoiId = 7, Origin = "Japan", Gender = "Female", Age = 1, Size = 50.0m, Status = "Available", Price = 7000m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p1.png" },
-                new KoiFish { KoiId = 8, Origin = "China", Gender = "Male", Age = 3, Size = 67.8m, Status = "Available", Price = 11500m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p2.jpeg" },
-                new KoiFish { KoiId = 9, Origin = "Vietnam", Gender = "Female", Age = 2, Size = 54.0m, Status = "Available", Price = 8000m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p3.png" },
-                new KoiFish { KoiId = 10, Origin = "Thailand", Gender = "Male", Age = 4, Size = 64.5m, Status = "Available", Price = 9700m, Health = "Healthy", KoiImage = "pack://application:,,,/KoiTrading;component/images/p1.png" }
-            };
         }
     }
 }

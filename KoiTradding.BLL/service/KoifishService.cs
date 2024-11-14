@@ -18,6 +18,18 @@ namespace KoiTradding.BLL.Services
             return await _koiFishRepository.GetAllAsync();
         }
 
+        //Filter Fish
+        public List<KoiFish> FilterKoiFish(List<KoiFish> koiFishList, string origin, string gender, decimal minPrice,
+            decimal maxPrice)
+        {
+            return koiFishList.Where(k =>
+                (origin == "All" || k.Origin == origin) &&
+                (gender == "All" || k.Gender == gender) &&
+                (minPrice == 0 || k.Price >= minPrice) &&
+                (maxPrice == 0 || k.Price <= maxPrice)
+            ).ToList();
+        }
+
         // Get a KoiFish by ID
         public async Task<KoiFish?> GetKoiFishByIdAsync(int koiId)
         {
@@ -30,17 +42,17 @@ namespace KoiTradding.BLL.Services
         // Add a new KoiFish
         public async Task<bool> AddKoiFishAsync(KoiFish koiFish)
         {
-            if (koiFish == null)
-                throw new ArgumentNullException(nameof(koiFish), "KoiFish cannot be null");
+                if (koiFish == null)
+                    throw new ArgumentNullException(nameof(koiFish), "KoiFish cannot be null");
 
-            // Business rule validation, e.g., check required fields
-            if (string.IsNullOrWhiteSpace(koiFish.Origin))
-                throw new ArgumentException("Origin is required.");
-            
-            if (koiFish.Price <= 0)
-                throw new ArgumentException("Price must be greater than zero.");
+                // Business rule validation, e.g., check required fields
+                if (string.IsNullOrWhiteSpace(koiFish.Origin))
+                    throw new ArgumentException("Origin is required.");
 
-            return await _koiFishRepository.AddAsync(koiFish);
+                if (koiFish.Price <= 0)
+                    throw new ArgumentException("Price must be greater than zero.");
+
+                return await _koiFishRepository.AddAsync(koiFish);
         }
 
         // Update an existing KoiFish

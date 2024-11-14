@@ -38,33 +38,44 @@ namespace KoiTrading
                     MessageBox.Show("Password cannot be empty", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-
-                // Attempt to login
+                
                 var account = await _accountService.LoginAsync(email, password);
 
                 if (account != null)
                 {
-                    // Login successful
                     MessageBox.Show("Login successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    
+                    switch (account.RoleId)
+                    {
+                        case 1: //  Staff
+                            var dashboardStaff = new DashboardStaff();
+                            dashboardStaff.Show();
+                            break;
 
-                    var shopList = new ShopList();
-                    shopList.Show();
+                        case 2: //  Manager
+                            var dashboardManager = new DashboardManager();
+                            dashboardManager.Show();
+                            break;
+
+                        default: // Cus
+                            var shopList = new ShopList();
+                            shopList.Show();
+                            break;
+                    }
+                    
                     this.Close();
                 }
                 else
                 {
-                    // Login failed
                     MessageBox.Show("Invalid email or password", "Login Failed", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex)
             {
-                // Handle exceptions
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-
+        
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
            

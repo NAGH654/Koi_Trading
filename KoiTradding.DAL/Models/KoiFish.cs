@@ -23,7 +23,8 @@ public partial class KoiFish
 
     public string? Health { get; set; }
 
-    public string? KoiImage { get; set; }
+    public byte[]? KoiImage { get; set; }
+    
 
     public virtual Category? Category { get; set; }
 
