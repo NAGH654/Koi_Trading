@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -32,13 +30,13 @@ public partial class KoiFishTradingContext : DbContext
     public virtual DbSet<Payment> Payments { get; set; }
 
     public virtual DbSet<Role> Roles { get; set; }
-    
+
     // Method to retrieve connection string from appsettings.json
     private string GetConnectionString()
     {
         IConfiguration config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            .AddJsonFile("appsettings.json", true, true)
             .Build();
 
         var strConn = config.GetConnectionString("DefaultConnectionStringDB");
@@ -53,11 +51,9 @@ public partial class KoiFishTradingContext : DbContext
     // Configure the context to use the SQL Server database
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseSqlServer(GetConnectionString());
-        }
+        if (!optionsBuilder.IsConfigured) optionsBuilder.UseSqlServer(GetConnectionString());
     }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Account>(entity =>

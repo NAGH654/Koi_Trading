@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace KoiTradding.DAL.Models;
 
-namespace KoiTradding.DAL.Models;
-
-public partial class Account
+public class Account
 {
     public int AccountId { get; set; }
 

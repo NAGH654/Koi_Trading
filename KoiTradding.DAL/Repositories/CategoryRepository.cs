@@ -1,5 +1,4 @@
-﻿
-using KoiTradding.DAL.Models;
+﻿using KoiTradding.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace KoiTradding.DAL.Repositories;
@@ -12,7 +11,7 @@ public class CategoryRepository
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
-    
+
     public async Task<List<Category>> GetAllAsync()
     {
         try

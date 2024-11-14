@@ -1,94 +1,89 @@
 ﻿using KoiTradding.DAL.Models;
 using KoiTradding.DAL.Repositories;
 
+namespace KoiTradding.BLL.Services;
 
-namespace KoiTradding.BLL.Services
+public class PaymentService
 {
-    public class PaymentService
+    private readonly PaymentRepository _paymentRepository;
+
+    public PaymentService(PaymentRepository paymentRepository)
     {
-        private readonly PaymentRepository _paymentRepository;
+        _paymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
+    }
 
-        public PaymentService(PaymentRepository paymentRepository)
-        {
-            _paymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
-        }
 
-       
-        public async Task<bool> CreatePaymentAsync(Payment payment)
-        {
-            if (payment == null)
-                throw new ArgumentNullException(nameof(payment));
+    public async Task<bool> CreatePaymentAsync(Payment payment)
+    {
+        if (payment == null)
+            throw new ArgumentNullException(nameof(payment));
 
-            // Business-specific validations
-            ValidatePayment(payment);
+        // Business-specific validations
+        ValidatePayment(payment);
 
-            
 
-            return await _paymentRepository.CreatePaymentAsync(payment);
-        }
+        return await _paymentRepository.CreatePaymentAsync(payment);
+    }
 
-       
-        public async Task<Payment?> GetPaymentByIdAsync(int paymentId)
-        {
-            if (paymentId <= 0)
-                throw new ArgumentException("Payment ID must be greater than zero.", nameof(paymentId));
 
-            return await _paymentRepository.GetPaymentByIdAsync(paymentId);
-        }
+    public async Task<Payment?> GetPaymentByIdAsync(int paymentId)
+    {
+        if (paymentId <= 0)
+            throw new ArgumentException("Payment ID must be greater than zero.", nameof(paymentId));
 
-        
-        public async Task<bool> UpdatePaymentAsync(Payment payment)
-        {
-            if (payment == null)
-                throw new ArgumentNullException(nameof(payment));
+        return await _paymentRepository.GetPaymentByIdAsync(paymentId);
+    }
 
-            // Business-specific validations
-            ValidatePayment(payment, isUpdate: true);
 
-            // Additional business rules can be added here
+    public async Task<bool> UpdatePaymentAsync(Payment payment)
+    {
+        if (payment == null)
+            throw new ArgumentNullException(nameof(payment));
 
-            return await _paymentRepository.UpdatePaymentAsync(payment);
-        }
+        // Business-specific validations
+        ValidatePayment(payment, true);
 
-        
-        public async Task<bool> DeletePaymentAsync(int paymentId)
-        {
-            if (paymentId <= 0)
-                throw new ArgumentException("Payment ID must be greater than zero.", nameof(paymentId));
+        // Additional business rules can be added here
 
-            // Additional business rules can be checked before deletion
+        return await _paymentRepository.UpdatePaymentAsync(payment);
+    }
 
-            return await _paymentRepository.DeletePaymentAsync(paymentId);
-        }
 
-        
-        public async Task<List<Payment>> GetAllPaymentsAsync()
-        {
-            return await _paymentRepository.GetAllPaymentsAsync();
-        }
+    public async Task<bool> DeletePaymentAsync(int paymentId)
+    {
+        if (paymentId <= 0)
+            throw new ArgumentException("Payment ID must be greater than zero.", nameof(paymentId));
 
-      
-        private void ValidatePayment(Payment payment, bool isUpdate = false)
-        {
-            if (!isUpdate && payment.PaymentId != 0)
-                throw new ArgumentException("Payment ID should not be set for a new payment.", nameof(payment.PaymentId));
+        // Additional business rules can be checked before deletion
 
-            if (payment.Amount == null || payment.Amount <= 0)
-                throw new ArgumentException("Amount must be provided and greater than zero.", nameof(payment.Amount));
+        return await _paymentRepository.DeletePaymentAsync(paymentId);
+    }
 
-            if (payment.PaymentDate == null)
-                throw new ArgumentException("Payment date must be provided.", nameof(payment.PaymentDate));
 
-            if (string.IsNullOrWhiteSpace(payment.Status))
-                throw new ArgumentException("Payment status must be provided.", nameof(payment.Status));
+    public async Task<List<Payment>> GetAllPaymentsAsync()
+    {
+        return await _paymentRepository.GetAllPaymentsAsync();
+    }
 
-            if (string.IsNullOrWhiteSpace(payment.TransactionCode))
-                throw new ArgumentException("Transaction code must be provided.", nameof(payment.TransactionCode));
 
-            if (payment.OrderId == null || payment.OrderId <= 0)
-                throw new ArgumentException("Order ID must be provided and greater than zero.", nameof(payment.OrderId));
+    private void ValidatePayment(Payment payment, bool isUpdate = false)
+    {
+        if (!isUpdate && payment.PaymentId != 0)
+            throw new ArgumentException("Payment ID should not be set for a new payment.", nameof(payment.PaymentId));
 
-            
-        }
+        if (payment.Amount == null || payment.Amount <= 0)
+            throw new ArgumentException("Amount must be provided and greater than zero.", nameof(payment.Amount));
+
+        if (payment.PaymentDate == null)
+            throw new ArgumentException("Payment date must be provided.", nameof(payment.PaymentDate));
+
+        if (string.IsNullOrWhiteSpace(payment.Status))
+            throw new ArgumentException("Payment status must be provided.", nameof(payment.Status));
+
+        if (string.IsNullOrWhiteSpace(payment.TransactionCode))
+            throw new ArgumentException("Transaction code must be provided.", nameof(payment.TransactionCode));
+
+        if (payment.OrderId == null || payment.OrderId <= 0)
+            throw new ArgumentException("Order ID must be provided and greater than zero.", nameof(payment.OrderId));
     }
 }

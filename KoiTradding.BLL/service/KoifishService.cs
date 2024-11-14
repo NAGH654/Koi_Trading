@@ -1,89 +1,88 @@
 ﻿using KoiTradding.DAL.Models;
 using KoiTradding.DAL.Repositories;
 
-namespace KoiTradding.BLL.Services
+namespace KoiTradding.BLL.Services;
+
+public class KoiFishService
 {
-    public class KoiFishService
+    private readonly KoiFishRepository _koiFishRepository;
+
+    public KoiFishService(KoiFishRepository koiFishRepository)
     {
-        private readonly KoiFishRepository _koiFishRepository;
+        _koiFishRepository = koiFishRepository ?? throw new ArgumentNullException(nameof(koiFishRepository));
+    }
 
-        public KoiFishService(KoiFishRepository koiFishRepository)
-        {
-            _koiFishRepository = koiFishRepository ?? throw new ArgumentNullException(nameof(koiFishRepository));
-        }
+    // Get all KoiFish
+    public async Task<List<KoiFish>> GetAllKoiFishAsync()
+    {
+        return await _koiFishRepository.GetAllAsync();
+    }
 
-        // Get all KoiFish
-        public async Task<List<KoiFish>> GetAllKoiFishAsync()
-        {
-            return await _koiFishRepository.GetAllAsync();
-        }
+    //Filter Fish
+    public List<KoiFish> FilterKoiFish(List<KoiFish> koiFishList, string origin, string gender, decimal minPrice,
+        decimal maxPrice)
+    {
+        return koiFishList.Where(k =>
+            (origin == "All" || k.Origin == origin) &&
+            (gender == "All" || k.Gender == gender) &&
+            (minPrice == 0 || k.Price >= minPrice) &&
+            (maxPrice == 0 || k.Price <= maxPrice)
+        ).ToList();
+    }
 
-        //Filter Fish
-        public List<KoiFish> FilterKoiFish(List<KoiFish> koiFishList, string origin, string gender, decimal minPrice,
-            decimal maxPrice)
-        {
-            return koiFishList.Where(k =>
-                (origin == "All" || k.Origin == origin) &&
-                (gender == "All" || k.Gender == gender) &&
-                (minPrice == 0 || k.Price >= minPrice) &&
-                (maxPrice == 0 || k.Price <= maxPrice)
-            ).ToList();
-        }
+    // Get a KoiFish by ID
+    public async Task<KoiFish?> GetKoiFishByIdAsync(int koiId)
+    {
+        if (koiId <= 0)
+            throw new ArgumentException("Koi ID must be greater than zero");
 
-        // Get a KoiFish by ID
-        public async Task<KoiFish?> GetKoiFishByIdAsync(int koiId)
-        {
-            if (koiId <= 0)
-                throw new ArgumentException("Koi ID must be greater than zero");
+        return await _koiFishRepository.GetByIdAsync(koiId);
+    }
 
-            return await _koiFishRepository.GetByIdAsync(koiId);
-        }
+    // Add a new KoiFish
+    public async Task<bool> AddKoiFishAsync(KoiFish koiFish)
+    {
+        if (koiFish == null)
+            throw new ArgumentNullException(nameof(koiFish), "KoiFish cannot be null");
 
-        // Add a new KoiFish
-        public async Task<bool> AddKoiFishAsync(KoiFish koiFish)
-        {
-                if (koiFish == null)
-                    throw new ArgumentNullException(nameof(koiFish), "KoiFish cannot be null");
+        // Business rule validation, e.g., check required fields
+        if (string.IsNullOrWhiteSpace(koiFish.Origin))
+            throw new ArgumentException("Origin is required.");
 
-                // Business rule validation, e.g., check required fields
-                if (string.IsNullOrWhiteSpace(koiFish.Origin))
-                    throw new ArgumentException("Origin is required.");
+        if (koiFish.Price <= 0)
+            throw new ArgumentException("Price must be greater than zero.");
 
-                if (koiFish.Price <= 0)
-                    throw new ArgumentException("Price must be greater than zero.");
+        return await _koiFishRepository.AddAsync(koiFish);
+    }
 
-                return await _koiFishRepository.AddAsync(koiFish);
-        }
+    // Update an existing KoiFish
+    public async Task<bool> UpdateKoiFishAsync(KoiFish koiFish)
+    {
+        if (koiFish == null)
+            throw new ArgumentNullException(nameof(koiFish), "KoiFish cannot be null");
 
-        // Update an existing KoiFish
-        public async Task<bool> UpdateKoiFishAsync(KoiFish koiFish)
-        {
-            if (koiFish == null)
-                throw new ArgumentNullException(nameof(koiFish), "KoiFish cannot be null");
+        if (koiFish.KoiId <= 0)
+            throw new ArgumentException("Koi ID must be greater than zero");
 
-            if (koiFish.KoiId <= 0)
-                throw new ArgumentException("Koi ID must be greater than zero");
+        // Additional validation or business rules
+        return await _koiFishRepository.UpdateAsync(koiFish);
+    }
 
-            // Additional validation or business rules
-            return await _koiFishRepository.UpdateAsync(koiFish);
-        }
+    // Delete a KoiFish by ID
+    public async Task<bool> DeleteKoiFishAsync(int koiId)
+    {
+        if (koiId <= 0)
+            throw new ArgumentException("Koi ID must be greater than zero");
 
-        // Delete a KoiFish by ID
-        public async Task<bool> DeleteKoiFishAsync(int koiId)
-        {
-            if (koiId <= 0)
-                throw new ArgumentException("Koi ID must be greater than zero");
+        return await _koiFishRepository.DeleteAsync(koiId);
+    }
 
-            return await _koiFishRepository.DeleteAsync(koiId);
-        }
+    // Check if a KoiFish exists by ID
+    public async Task<bool> KoiFishExistsAsync(int koiId)
+    {
+        if (koiId <= 0)
+            throw new ArgumentException("Koi ID must be greater than zero");
 
-        // Check if a KoiFish exists by ID
-        public async Task<bool> KoiFishExistsAsync(int koiId)
-        {
-            if (koiId <= 0)
-                throw new ArgumentException("Koi ID must be greater than zero");
-
-            return await _koiFishRepository.ExistsAsync(koiId);
-        }
+        return await _koiFishRepository.ExistsAsync(koiId);
     }
 }

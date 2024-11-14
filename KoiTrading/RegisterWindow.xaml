@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:KoiTrading"
         mc:Ignorable="d"
         Title="RegisterWindow" Height="600" Width="500" WindowStartupLocation="CenterScreen">
     <Grid>
@@ -91,8 +90,10 @@
                                         </Border>
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="AliceBlue" TargetName="SignUpBorder" />
-                                                <Setter Property="TextBlock.Foreground" Value="Black" TargetName="SignUpBorder" />
+                                                <Setter Property="Background" Value="AliceBlue"
+                                                        TargetName="SignUpBorder" />
+                                                <Setter Property="TextBlock.Foreground" Value="Black"
+                                                        TargetName="SignUpBorder" />
                                             </Trigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>
