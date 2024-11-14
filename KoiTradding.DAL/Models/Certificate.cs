@@ -9,7 +9,7 @@ public partial class Certificate
 
     public string? Name { get; set; }
 
-    public string? Image { get; set; }
+    public byte[]? Image { get; set; }
 
     public DateTime? CreateDate { get; set; }
 
